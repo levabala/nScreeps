@@ -3,7 +3,7 @@ var creeps = require('creeps');
 
 function countCreeps(spawn){
 	var room = global.getRoomSpawn(spawn);
-	var creeps = global.getCreepsInRoom;
+	var creeps = global.getCreepsInRoom(room);
 	for(var name in creeps){
 		var creep = creeps[name];
 		if(creep.memory.role == 'builder'){
