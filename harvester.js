@@ -1,12 +1,13 @@
 var global = require('global');
 
-function harvest(creep, energy){
-	if(creep.pos.isNearTo(energy[harvesterCount%2])){
-		creep.harvest(energy[creep.memory.energy])
+function harvest(creep, room){
+    var energy = room.find(FIND_SOURCES);
+	if(creep.pos.isNearTo(energy[Memory.rooms.room.harvesterCount%2])){
+		creep.harvest(energy[Memory.rooms.room.harvesterCount%2]);
 	}
 	else{
 		//when spawn add creep.memory.energy = 0 or 1 =)
-		creep.moveTo(energy[creep.memory.energy]);
+		creep.moveTo(energy[Memory.rooms.room.harvesterCount%2]);
 	}
 }
 
