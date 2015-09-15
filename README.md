@@ -12,3 +12,8 @@ mechanic.js - upgrade ramparts.
 mechanic1.js - repair roads.
 
 transport.js - creeps who transport energy from storage to spawn and extension's.
+
+# What need make yet:
+1. Split harvester's
+2. Transfer's from link to link
+3. Finish logic for guard's, archer's and healer's! =)
