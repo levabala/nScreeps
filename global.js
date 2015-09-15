@@ -8,9 +8,8 @@ function getCreepsInRoom(room){
 }
 
 function getSpawn(room)
-	if(room == [room E4N9]){
-		return Game.spawns.Spawn1;
-	}
+	var spawn = Game.spawns.Spawn1;
+	return spawn;
 }
 
 function getRoomCreep(creep){
@@ -42,3 +41,4 @@ module.exports = {
 	getSpawn: getSpawn,
 	getRoomSpawn: getRoomSpawn
 }
+
