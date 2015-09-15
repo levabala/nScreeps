@@ -6,6 +6,7 @@ function repairRoad(creep){
 		creeps.takeEnergy(creep);
 	}
 	else{
+		
 		var needRepairRoad = creep.pos.findClosestByPath(FIND_STRUCTURES, {
     		filter: function(object) {
     			if(object.structureType == 'road'){
