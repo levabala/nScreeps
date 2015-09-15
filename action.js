@@ -12,6 +12,15 @@ function attack(creep){
 	}
 }
 
+function storm(creep, wall){
+	if(creep.pos.isNearTo(wall)){
+		creep.attack(wall);
+	}
+	else{
+		creep.moveTo(wall);
+	}
+}
+
 function dodge(creep){
 	var closestCreep = creep.pos.findClosestByPath(FIND_MY_CREEPS);
 	creep.moveTo(closestCreep);
@@ -74,5 +83,6 @@ module.exports = {
 	dodge: dodge,
 	healCreep: healCreep,
 	rangedAttack: rangedAttack,
-	party: party
+	party: party,
+	storm: storm
 }
