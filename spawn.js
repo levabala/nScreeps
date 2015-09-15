@@ -35,17 +35,17 @@ function countCreeps(spawn){
 //	I have 3 types: 300, 550, 700, 1000.
 
 function calcEnergy{
-	if(Game.rooms.room.energyCapacityAvailable <= 300){
-		return 300;
+	if(Game.rooms.room.energyCapacityAvailable >= 1000){
+		return 1000;
 	}
-	else if(Game.rooms.room.energyCapacityAvailable <= 550){
-		return 550;
-	}
-	else if(Game.rooms.room.energyCapacityAvailable <= 700){
+	else if(Game.rooms.room.energyCapacityAvailable >= 700){
 		return 700;
 	}
-	else if(Game.rooms.room.energyCapacityAvailable <= 1000){
-		return 1000;
+	else if(Game.rooms.room.energyCapacityAvailable >= 550){
+		return 550;
+	}
+	else if(Game.rooms.room.energyCapacityAvailable >= 300){
+		return 300;
 	}
 }
 
