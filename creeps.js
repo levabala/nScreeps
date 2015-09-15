@@ -4,16 +4,16 @@ function takeEnergy(creep){
 	var room = global.getRoomCreep(creep);
 	if(creep.room.storage){
 		if(creep.pos.isNearTo(creep.room.storage)){
-       		creep.room.storage.transferEnergy(creep);
-    	}
-    	else{
-    		creep.moveTo(creep.room.storage);
-    	}
+       			creep.room.storage.transferEnergy(creep);
+    		}
+    		else{
+    			creep.moveTo(creep.room.storage);
+    		}
    	}
    	else{
    		var spawn = global.getSpawn(creep);
    		creep.moveTo(spawn);
-      	spawn.transferEnergy(creep);
+      		spawn.transferEnergy(creep);
    	}
 }
 
