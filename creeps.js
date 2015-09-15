@@ -10,8 +10,8 @@ function takeEnergy(creep){
     		creep.moveTo(creep.room.storage);
     	}
    	}
-   	var spawn = global.getSpawn(creep);
    	else{
+   		var spawn = global.getSpawn(creep);
    		creep.moveTo(spawn);
       	spawn.transferEnergy(creep);
    	}
