@@ -1,4 +1,4 @@
-# nScreeps Alpha
+# nScreeps Beta
 My second screeps code now i work at this script
 
 Action.js It contains all functions for fighting.
