@@ -1,5 +1,3 @@
-var creeps = require('creeps');
-
 var suicideCreepTick = 200;
 
 function getCreepsInRoom(room){
@@ -7,9 +5,9 @@ function getCreepsInRoom(room){
 	return creeps;
 }
 
-function getSpawn(room)
-	var spawn = Game.spawns.Spawn1;
-	return spawn;
+    
+function getSpawn(room){
+	return Game.spawns.Spawn1;
 }
 
 function getRoomCreep(creep){
@@ -23,11 +21,10 @@ function getNameRoomCreep(creep){
 }
 
 function getRoomSpawn(spawn){
-	var room = Game.spawns.spawn.pos.roomName;
-	return room;
+	return Game.spawns.Spawn1;
 }
 
-var roomOptions {
+var roomOptions = {
 	'E4N9': {
 		maxHits: 260000
 	}
@@ -36,7 +33,6 @@ var roomOptions {
 module.exports = {
 	roomOptions: roomOptions,
 	getCreepsInRoom: getCreepsInRoom,
-	room: room,
 	suicideCreepTick: suicideCreepTick,
 	getSpawn: getSpawn,
 	getRoomSpawn: getRoomSpawn
