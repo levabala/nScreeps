@@ -7,4 +7,4 @@ I think other files understandable in the name besides:
 creep.js - similar functions for the creeps.
 mechanic.js - upgrade ramparts.
 mechanic1.js - repair roads.
-transport.js - creeps who transport energy from storage to spawn and extension's.
+transport.js - creeps who transport energy from storage to spawn and extension's
