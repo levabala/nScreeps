@@ -7,14 +7,20 @@ function getCreepsInRoom(room){
 	return creeps;
 }
 
-function getSpawn(creep){
-	var closestSpawn = creep.pos.findClosestByPath(FIND_MY_SPAWNS);
-	return closestSpawn;
+function getSpawn(room)
+	if(room == [room E4N9]){
+		return Game.spawns.Spawn1;
+	}
 }
 
 function getRoomCreep(creep){
+	var room = creep.room;
+	return room;
+}
+
+function getNameRoomCreep(creep){
 	var room = creep.pos.roomName;
-	return room;		
+	return room;
 }
 
 function getRoomSpawn(spawn){
