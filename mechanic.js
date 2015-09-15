@@ -6,7 +6,8 @@ function repairRamparts(creep){
 		creeps.takeEnergy(creep);
 	}
 	else{
-		var needRepairRampart = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+		var room = global.getRoomCreep(creep);
+		var needRepairRampart = room.find(FIND_MY_STRUCTURES, {
     		filter: function(object) {
     			if(object.structureType == 'rampart'){
     				return object.hits < global.roomOptions.room.maxHits;
