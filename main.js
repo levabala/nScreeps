@@ -9,6 +9,8 @@ var mechanic1 = require('mechanic1');
 var transport = require('transport');
 var upgrade = require('upgrade');
 
+var room1 = Game.spawns.Spawn1.room;
+var spawn1 = Game.spawns.Spawn1;
 
 spawn.countCreeps(Game.spawns.Spawn1);
 
@@ -20,9 +22,6 @@ var upgraderNeed = 1 - spawn.upgraderCount;
 var mechanicNeed = 1 - spawn.mechanicCount;
 var mechanic1Need = 1 - spawn.mechanic1Count;
 var transportNeed = 1 - spawn.transportCount;
-
-var room1 = Game.spawns.Spawn1.room;
-var spawn1 = Game.spawns.Spawn1;
 
 var creepsInRoom = globals.getCreepsInRoom(room1);
 if(creepsInRoom != spawn.needAllCreepsInRoom){
