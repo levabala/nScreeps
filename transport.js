@@ -1,4 +1,4 @@
-var global = require('global');
+var globals = require('globals');
 
 function transportTo(creep){
     var room = global.getRoomCreep(creep);
