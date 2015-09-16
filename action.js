@@ -1,4 +1,4 @@
-var global = require('global');
+var globals = require('globals');
 
 //logic of warrior's
 function attack(creep){
