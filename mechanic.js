@@ -1,4 +1,4 @@
-var global = require('global');
+var globals = require('globals');
 var creeps = require('creeps');
 
 function repairRamparts(creep){
@@ -13,7 +13,7 @@ function repairRamparts(creep){
     				return object.hits < global.roomOptions.room.maxHits;
     			}
     		}
-		}
+		});
 		if(needRepairRampart){
 			if(creep.pos.isNearTo(needRepairRampart)){
 				creep.repair(needRepairRampart);
