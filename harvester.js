@@ -1,4 +1,4 @@
-var global = require('global');
+var globals = require('globals');
 
 function harvest(creep, room){
     var energy = room.find(FIND_SOURCES);
