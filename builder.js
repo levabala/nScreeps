@@ -1,21 +1,21 @@
 var globals = require('globals');
 
-function build(creep){
-	var room = global.getRoomCreep(creep);
+function builds(creep){
+	var room = globals.getRoomCreep(creep);
 	var needBuild = room.find(FIND_CONSTRUCTION_SITES);
 	if(needBuild){
-		if(creep.pos.isNearTo(needBuild)){
-			creep.build(needBuild);
+		if(creep.pos.isNearTo(needBuild[0])){
+			creep.build(needBuild[0]);
 		}
 		else{
-			creep.moveTo(needBuild);
+			creep.moveTo(needBuild[0]);
 		}
 	}
 	else{
 		var constructedWall = room.find(FIND_STRUCTURES, {
     		filter: function(object) {
     			if(object.structureType == "constructedWall"){
-        			return object.hits < global.roomOptions.room.maxHits;
+        			return object.hits < globals.roomOptions.room.maxHits;
         		}
     		}
 		});
@@ -30,6 +30,6 @@ function build(creep){
     }
 }	
 
-module.exports{
-	build: build
+module.exports = {
+	builds: builds
 }
