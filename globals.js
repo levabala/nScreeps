@@ -1,7 +1,7 @@
 var suicideCreepTick = 200;
 
 function getCreepsInRoom(room){
-	var creeps = room.find(FIND_MY_CREEPS);
+	var creeps = Game.creeps
 	return creeps;
 }
 
@@ -19,6 +19,11 @@ function getRoomSpawn(spawn){
 function getRoomCreep(creep){
 	var room = creep.room;
 	return room;
+}
+
+function getNameRoom(creep){
+	var roomName = creep.pos.roomName;
+	return roomName;
 }
 
 var roomOptions = {
