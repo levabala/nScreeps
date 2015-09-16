@@ -11,21 +11,27 @@ function takeEnergy(creep){
     	}
    	}
    	else{
-   		var spawn = globals.getSpawn(creep);
-   		creep.moveTo(spawn);
-      	spawn.transferEnergy(creep);
+   	    var room = globals.getRoomCreep(creep);
+   		var spawn = globals.getSpawn(room);
+   		if(creep.pos.isNearTo(spawn[0])){
+      	    spawn[0].transferEnergy(creep);
+   		}
+   		else{
+   		    creep.moveTo(spawn[0]);
+   		}
    	}
 }
 
 function suicideCreep(creep){
 	if(creep.ticksToLive < globals.suicideCreepTick){
-		globals.getSpawn(creep);
-		if(creep.pos.isNearTo(getSpawn)){
-			creep.transferEnergy(getSpawn);
+	    var room = globals.getRoomCreep(creep);
+		var spawn = globals.getSpawn(room);
+		if(creep.pos.isNearTo(spawn[0])){
+			creep.transferEnergy(spawn[0]);
 			creep.suicide();
 		}
 		else{
-			creep.moveTo(getSpawn);
+			creep.moveTo(spawn[0]);
 		}
 		cleanMemory();
 		return 1;
