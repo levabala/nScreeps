@@ -8,7 +8,6 @@ var mechanic = require('mechanic');
 var mechanic1 = require('mechanic1');
 var transport = require('transport');
 var upgrade = require('upgrade');
-var scout = require('scout');
 
 var room1 = Game.spawns.Spawn1.room;
 var spawn1 = Game.spawns.Spawn1;
