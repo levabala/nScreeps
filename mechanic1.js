@@ -1,4 +1,4 @@
-var global = require('global');
+var globals = require('globals');
 var creeps = require('creeps');
 
 function repairRoad(creep){
@@ -6,14 +6,13 @@ function repairRoad(creep){
 		creeps.takeEnergy(creep);
 	}
 	else{
-		
 		var needRepairRoad = creep.pos.findClosestByPath(FIND_STRUCTURES, {
     		filter: function(object) {
     			if(object.structureType == 'road'){
     				return object.hits < object.hitsMax;
     			}
     		}
-		}
+		});
 		if(needRepairRoad){
 			if(creep.pos.isNearTo(needRepairRoad)){
 				creep.repair(needRepairRoad);
