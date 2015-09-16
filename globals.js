@@ -1,7 +1,7 @@
 var suicideCreepTick = 200;
 
 function getCreepsInRoom(room){
-	var creeps = Game.creeps
+	var creeps = room.find(FIND_MY_CREEPS);
 	return creeps;
 }
 
@@ -38,5 +38,6 @@ module.exports = {
 	suicideCreepTick: suicideCreepTick,
 	getSpawn: getSpawn,
 	getRoomCreep: getRoomCreep,
-	getRoomSpawn: getRoomSpawn
+	getRoomSpawn: getRoomSpawn,
+	getNameRoom: getNameRoom
 }
