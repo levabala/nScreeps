@@ -1,25 +1,25 @@
-var global = require('global');
+var globals = require('globals');
 
 function takeEnergy(creep){
-	var room = global.getRoomCreep(creep);
+	var room = globals.getRoomCreep(creep);
 	if(creep.room.storage){
 		if(creep.pos.isNearTo(creep.room.storage)){
-       			creep.room.storage.transferEnergy(creep);
-    		}
-    		else{
-    			creep.moveTo(creep.room.storage);
-    		}
+       		creep.room.storage.transferEnergy(creep);
+    	}
+    	else{
+    		creep.moveTo(creep.room.storage);
+    	}
    	}
    	else{
-   		var spawn = global.getSpawn(creep);
+   		var spawn = globals.getSpawn(creep);
    		creep.moveTo(spawn);
-      		spawn.transferEnergy(creep);
+      	spawn.transferEnergy(creep);
    	}
 }
 
 function suicideCreep(creep){
-	if(creep.ticksToLive < global.suicideCreepTick){
-		global.getSpawn(creep);
+	if(creep.ticksToLive < globals.suicideCreepTick){
+		globals.getSpawn(creep);
 		if(creep.pos.isNearTo(getSpawn)){
 			creep.transferEnergy(getSpawn);
 			creep.suicide();
@@ -48,6 +48,5 @@ function cleanMemory(){
 
 module.exports = {
 	takeEnergy: takeEnergy,
-	suicideCreep: suicideCreep,
-	controlRoom: controlRoom
+	suicideCreep: suicideCreep
 }
