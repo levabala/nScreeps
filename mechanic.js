@@ -7,11 +7,11 @@ function repairRamparts(creep){
 	}
 	else{
 		var room = globals.getRoomCreep(creep);
+		var roomName = globals.getNameRoom(creep);
 		var needRepairRampart = room.find(FIND_MY_STRUCTURES, {
     		filter: function(object) {
     			if(object.structureType == 'rampart'){
-    			    //need fix E4N9
-    				return object.hits < globals.roomOptions.E4N9.maxHits;
+    				return object.hits < globals.roomOptions.roomName.maxHits;
     			}
     		}
 		});
