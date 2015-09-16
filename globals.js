@@ -7,21 +7,18 @@ function getCreepsInRoom(room){
 
     
 function getSpawn(room){
-	return Game.spawns.Spawn1;
+	var spawn = room.find(FIND_MY_SPAWNS);
+	return spawn;
+}
+
+function getRoomSpawn(spawn){
+	var room = spawn.room;
+	return room;
 }
 
 function getRoomCreep(creep){
 	var room = creep.room;
 	return room;
-}
-
-function getNameRoomCreep(creep){
-	var room = creep.pos.roomName;
-	return room;
-}
-
-function getRoomSpawn(spawn){
-	return Game.spawns.Spawn1;
 }
 
 var roomOptions = {
@@ -35,6 +32,6 @@ module.exports = {
 	getCreepsInRoom: getCreepsInRoom,
 	suicideCreepTick: suicideCreepTick,
 	getSpawn: getSpawn,
+	getRoomCreep: getRoomCreep,
 	getRoomSpawn: getRoomSpawn
 }
-
