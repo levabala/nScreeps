@@ -1,4 +1,4 @@
-var global = require('global');
+var globals = require('globals');
 var creeps = require('creeps');
 
 function repairRamparts(creep){
@@ -6,20 +6,21 @@ function repairRamparts(creep){
 		creeps.takeEnergy(creep);
 	}
 	else{
-		var room = global.getRoomCreep(creep);
+		var room = globals.getRoomCreep(creep);
 		var needRepairRampart = room.find(FIND_MY_STRUCTURES, {
     		filter: function(object) {
     			if(object.structureType == 'rampart'){
-    				return object.hits < global.roomOptions.room.maxHits;
+    			    //need fix E4N9
+    				return object.hits < globals.roomOptions.E4N9.maxHits;
     			}
     		}
-		}
+		});
 		if(needRepairRampart){
-			if(creep.pos.isNearTo(needRepairRampart)){
-				creep.repair(needRepairRampart);
+			if(creep.pos.isNearTo(needRepairRampart[0])){
+				creep.repair(needRepairRampart[0]);
 			}
 			else{
-				creep.moveTo(needRepairRampart);
+				creep.moveTo(needRepairRampart[0]);
 			}
 		}
 	}	
