@@ -7,7 +7,7 @@ function getCreepsInRoom(room){
 
     
 function getSpawn(room){
-	var spawn = room.find(FIND_MY_SPAWNS);
+    var spawn = room.find(FIND_MY_SPAWNS);
 	return spawn;
 }
 
