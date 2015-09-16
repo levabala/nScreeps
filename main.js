@@ -42,14 +42,14 @@ for(var i = 0; i < creepsInRoom.length; i++) {
 		    creeps.suicideCreep(creep);
 		}
 	}
-	if(creep.memory.role == 'scout'){
+	if(creep.memory.role == 'transport'){
 		var clean = creeps.suicideCreep(creep);
 		if(clean == 0){
 			if(creep.carry.energy == 0){
-				scout.takesEnergy(creep);
+				transport.takesEnergy(creep);
 			}
 			else{
-				scout.transferToStore(creep);
+				transport.transferToStore(creep);
 			}
 		}
 		else{
@@ -69,20 +69,6 @@ for(var i = 0; i < creepsInRoom.length; i++) {
 		var clean = creeps.suicideCreep(creep);
 		if(clean == 0){
 			mechanic1.repairRoad(creep);
-		}
-		else{
-		    creeps.suicideCreep(creep);
-		}
-	}
-	if(creep.memory.role == 'transport'){
-		var clean = creeps.suicideCreep(creep);
-		if(clean == 0){
-		    if(creep.carry.energy == 0){
-				creeps.takeEnergy(creep);
-			}
-			else{
-			    transport.transportTo(creep);
-			}
 		}
 		else{
 		    creeps.suicideCreep(creep);
