@@ -1,4 +1,5 @@
 var globals = require('globals');
+var creeps = require('creeps');
 
 function transportTo(creep){
     var room = globals.getRoomCreep(creep);
@@ -29,8 +30,39 @@ function transportTo(creep){
     }
 }
 
-module.exports = {
-    transportTo: transportTo
+function takesEnergy(creep){
+    var room = globals.getRoomCreep(creep);
+    var energy = room.find(FIND_DROPPED_ENERGY);
+    if(creep.pos.isNearTo(energy[0])){
+        creep.pickup(energy[0]);
+    }
+    else{
+        creep.moveTo(energy[0]);
+    }
 }
+
+function transferToStore(creep){
+    var room = globals.getRoomCreep(creep);
+    var spawn = globals.getSpawn(room);
+    var storage = room.storage;
+    if(true){
+        transportTo(creep);
+    }
+    else if(storage){
+        if(creep.pos.isNearTo(storage)){
+            creep.transferEnergy(storage);
+        }
+        else{
+            creep.moveTo(storage);
+        }
+    }
+}
+
+module.exports = {
+    transportTo: transportTo,
+    takesEnergy: takesEnergy,
+    transferToStore: transferToStore
+}
+
 
 
