@@ -1,7 +1,7 @@
 var globals = require('globals');
 var creeps = require('creeps');
 
-var needAllCreepsInRoom = 12;
+var needAllCreepsInRoom = 9;
 var harvesterCount = 0;
 var builderCount = 0;
 var guardCount = 0;
@@ -24,9 +24,6 @@ function countCreeps(spawn){
 	    }
 	    if(creep.memory.role == 'guard'){
 	        guardCount+=1;
-	    }
-	    if(creep.memory.role == 'scout'){
-	        scoutCount+=1;
 	    }
 	    if(creep.memory.role == 'upgrader'){
 	        upgraderCount+=1;
@@ -87,14 +84,11 @@ function deleteCreeps(){
 }
 
 function spawnCreeps(room, spawn, calcEnergy){
-	if(harvesterNeed > 0){
-		spawn.createCreep( bodies["havresterBody"][calcEnergy], null , {role : "harvester"} );
-	}
-	else if(scoutNeed > 0){
-		spawn.createCreep( bodies["scoutBody"][calcEnergy], null , {role : "scout"} );
-	}
-	else if(transportNeed > 0){
+	if(transportNeed > 0){
 		spawn.createCreep( bodies["transportBody"][calcEnergy], null , {role : "transport"} );
+	}
+	else if(harvesterNeed > 0){
+		spawn.createCreep( bodies["havresterBody"][calcEnergy], null , {role : "harvester"} );
 	}
 	else if(builderNeed > 0){
 		spawn.createCreep( bodies["builderBody"][calcEnergy], null , {role : "builder"} );
@@ -119,12 +113,6 @@ var bodies = {
         550: [MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK],
         700: [WORK, WORK, WORK, WORK, MOVE, MOVE, MOVE, MOVE, WORK],
         1000: [WORK, WORK, WORK, WORK, WORK, MOVE, MOVE, MOVE, MOVE, MOVE, WORK, CARRY, CARRY, MOVE]
-    },
-    scoutBody : {
-        300: [MOVE, MOVE, MOVE, CARRY, CARRY, CARRY],
-        550: [MOVE, MOVE, MOVE, CARRY, CARRY, CARRY, CARRY, MOVE, CARRY, CARRY, MOVE],
-        700: [MOVE, MOVE, MOVE, CARRY, CARRY, CARRY, CARRY, MOVE, CARRY, CARRY, MOVE, MOVE, CARRY, MOVE],
-        1000: [MOVE, MOVE, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, CARRY, CARRY, MOVE, CARRY, CARRY, CARRY, MOVE, CARRY, CARRY, CARRY, CARRY],
     },
     builderBody : {
         300: [WORK, CARRY, MOVE, CARRY, MOVE],
@@ -197,5 +185,7 @@ module.exports = {
 	transportNeed: transportNeed
 
 }
+
+
 
 
