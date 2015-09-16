@@ -1,15 +1,16 @@
-var global = require('global');
+var globals = require('globals');
 
 function transportTo(creep){
-    var room = global.getRoomCreep(creep);
-	var spawn = global.getSpawn(creep);
-	if(spawn.energy < spawn.energyCapacity){
-		if(creep.pos.isNearTo(spawn)){
-        	creep.transferEnergy(spawn);
-    	}
-    	else{
-    		creep.moveTo(spawn);
-    	}
+    var room = globals.getRoomCreep(creep);
+    var spawn = globals.getSpawn(room);
+    console.log(creep);
+    if(spawn[0].energy < spawn[0].energyCapacity){
+        if(creep.pos.isNearTo(spawn[0])){
+            creep.transferEnergy(spawn[0]);
+        }
+        else{
+            creep.moveTo(spawn[0]);
+        }
     }
     var emptyExtensions = room.find(FIND_MY_STRUCTURES, {
         filter: function(object){
@@ -18,16 +19,18 @@ function transportTo(creep){
             }
         }
     });
-    else if(emptyExtensions){
-    	if(creep.pos.isNearTo(emptyExtensions)){
-       		creep.transferEnergy(emptyExtensions);
-    	}
-    	else{
-    		creep.moveTo(emptyExtensions);
-    	}
+    if(emptyExtensions){
+        if(creep.pos.isNearTo(emptyExtensions[0])){
+            creep.transferEnergy(emptyExtensions[0]);
+        }
+        else{
+            creep.moveTo(emptyExtensions[0]);
+        }
     }
 }
 
 module.exports = {
-	transportTo: transportTo
+    transportTo: transportTo
 }
+
+
