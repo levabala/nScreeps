@@ -1,8 +1,8 @@
-var global = require('global');
+var globals = require('globals');
 var creeps = require('creeps');
 
 function upgrade(creep){
-	var room = global.room(creep);
+	var room = globals.getRoomCreep(creep);
 	if(creep.carry.energy == 0){
 		creeps.takeEnergy(creep);
 	}
