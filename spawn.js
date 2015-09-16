@@ -1,50 +1,74 @@
-var global = require('global');
+var globals = require('globals');
 var creeps = require('creeps');
 
+var needAllCreepsInRoom = 12;
+var harvesterCount = 0;
+var builderCount = 0;
+var guardCount = 0;
+var scoutCount = 0;
+var upgraderCount = 0;
+var mechanicCount = 0;
+var mechanic1Count = 0;
+var transportCount = 0;
+
 function countCreeps(spawn){
-	var room = global.getRoomSpawn(spawn);
-	var creeps = global.getCreepsInRoom(room);
+	var room = globals.getRoomSpawn(spawn);
+	var creeps = globals.getCreepsInRoom(room);
 	for(var name in creeps){
 		var creep = creeps[name];
 		if(creep.memory.role == 'builder'){
-        	Memory.rooms.room.builderCount+=1;      
+        	builderCount+=1;      
     	}
 	    if(creep.memory.role == 'harvester'){
-	        Memory.rooms.room.harvesterCount+=1;
+	        harvesterCount+=1;
 	    }
 	    if(creep.memory.role == 'guard'){
-	        Memory.rooms.room.guardCount+=1;
+	        guardCount+=1;
 	    }
 	    if(creep.memory.role == 'scout'){
-	        Memory.rooms.room.scoutCount+=1;
+	        scoutCount+=1;
 	    }
 	    if(creep.memory.role == 'upgrader'){
-	        Memory.rooms.room.upgraderCount+=1;
+	        upgraderCount+=1;
 	    }
 	    if(creep.memory.role == 'mechanic'){
-	        Memory.rooms.room.mechanicCount+=1;
+	        mechanicCount+=1;
 	    }
 	    if(creep.memory.role == 'mechanic1'){
-	        Memory.rooms.room.mechanic1Count+=1;
+	        mechanic1Count+=1;
 	    }
 	    if(creep.memory.role == 'transport'){
-	        Memory.rooms.room.transportCount+=1;
+	        transportCount+=1;
 	    }
 	}
 }
+
+
+var spawn1 = Game.spawns.Spawn1;
+countCreeps(spawn1);
+
+var harvesterNeed = 3 - harvesterCount;
+var builderNeed = 2 - builderCount ;
+var guardNeed = 1 - guardCount;
+var scoutNeed = 1 - scoutCount;
+var upgraderNeed = 1 - upgraderCount;
+var mechanicNeed = 1 - mechanicCount;
+var mechanic1Need = 1 - mechanic1Count;
+var transportNeed = 1 - transportCount;
+
 //	I have 3 types: 300, 550, 700, 1000.
 
-function calcEnergy{
-	if(Game.rooms.room.energyCapacityAvailable >= 1000){
+function calcEnergy(room){
+	if(room.energyCapacityAvailable >= 1000){
 		return 1000;
 	}
-	else if(Game.rooms.room.energyCapacityAvailable >= 700){
+	else if(room.energyCapacityAvailable >= 700){
 		return 700;
 	}
-	else if(Game.rooms.room.energyCapacityAvailable >= 550){
+	else if(room.energyCapacityAvailable >= 550){
 		return 550;
 	}
-	else if(Game.rooms.room.energyCapacityAvailable >= 300){
+	else if(room.energyCapacityAvailable >= 300){
 		return 300;
 	}
 }
@@ -62,31 +86,30 @@ function deleteCreeps(){
     }    
 }
 
-function spawnCreeps(room, spawn){
-	var calcEnergy = calcEnergy(room);
-	if(Memory.rooms.room.transportNeed > 0){
-		Game.spawns.spawn.createCreep( bodies["transportBody"][calcEnergy], null , {role : "transport"} );
+function spawnCreeps(room, spawn, calcEnergy){
+	if(harvesterNeed > 0){
+		spawn.createCreep( bodies["havresterBody"][calcEnergy], null , {role : "harvester"} );
 	}
-	else if(Memory.rooms.room.harvesterNeed > 0){
-		Game.spawns.spawn.createCreep( bodies["havresterBody"][calcEnergy], null , {role : "harvester"} );
+	else if(scoutNeed > 0){
+		spawn.createCreep( bodies["scoutBody"][calcEnergy], null , {role : "scout"} );
 	}
-	else if(Memory.rooms.room.scoutNeed > 0){
-		Game.spawns.spawn.createCreep( bodies["scoutBody"][calcEnergy], null , {role : "scout"} );
+	else if(transportNeed > 0){
+		spawn.createCreep( bodies["transportBody"][calcEnergy], null , {role : "transport"} );
 	}
-	else if(Memory.rooms.room.builderNeed > 0){
-		Game.spawns.spawn.createCreep( bodies["builderBody"][calcEnergy], null , {role : "builder"} );
+	else if(builderNeed > 0){
+		spawn.createCreep( bodies["builderBody"][calcEnergy], null , {role : "builder"} );
 	}
-	else if(Memory.rooms.room.mechanicNeed > 0){
-		Game.spawns.spawn.createCreep( bodies["mechanicBody"][calcEnergy], null , {role : "mechanic"} );
+	else if(mechanicNeed > 0){
+		spawn.createCreep( bodies["mechanicBody"][calcEnergy], null , {role : "mechanic"} );
 	}
-	else if(Memory.rooms.room.mechanic1Need > 0){
-		Game.spawns.spawn.createCreep( bodies["mechanicBody"][calcEnergy], null , {role : "mechanic1"} );
+	else if(mechanic1Need > 0){
+		spawn.createCreep( bodies["mechanicBody"][calcEnergy], null , {role : "mechanic1"} );
 	}
-	else if(Memory.rooms.room.upgraderNeed > 0){
-		Game.spawns.spawn.createCreep( bodies["upgraderBody"][calcEnergy], null , {role : "upgrader"} );
+	else if(upgraderNeed > 0){
+		spawn.createCreep( bodies["upgraderBody"][calcEnergy], null , {role : "upgrader"} );
 	}
-	else if(Memory.rooms.room.guardNeed > 0){
-		Game.spawns.spawn.createCreep( bodies["guardBody"][calcEnergy], null , {role : "guard"} );
+	else if(guardNeed > 0){
+		spawn.createCreep( bodies["guardBody"][calcEnergy], null , {role : "guard"} );
 	}
 }
 
@@ -154,5 +177,25 @@ module.exports = {
 	calcEnergy: calcEnergy,
 	spawnCreeps: spawnCreeps,
 	deleteCreeps: deleteCreeps,
-	calcTarget: calcTarget
+	needAllCreepsInRoom: needAllCreepsInRoom,
+	harvesterCount: harvesterCount,
+	builderCount: builderCount,
+	guardCount: guardCount,
+	scoutCount: scoutCount,
+	upgraderCount: upgraderCount,
+	mechanicCount: mechanicCount,
+	mechanic1Count: mechanic1Count,
+	transportCount: transportCount,
+	calcEnergy: calcEnergy,
+	harvesterNeed: harvesterNeed,
+	builderNeed: builderNeed,
+	guardNeed: guardNeed,
+	scoutNeed: scoutNeed,
+	upgraderNeed: upgraderNeed,
+	mechanicNeed: mechanicNeed,
+	mechanic1Need: mechanic1Need,
+	transportNeed: transportNeed
+
 }
+
+
