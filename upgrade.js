@@ -1,4 +1,4 @@
-var global = require('global');
+var globals = require('globals');
 var creeps = require('creeps');
 
 function upgrade(creep){
