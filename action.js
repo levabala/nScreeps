@@ -1,8 +1,13 @@
 var globals = require('globals');
 
+function checkEnemy(room){
+	var enemys = room.find(FIND_HOSTILE_CREEPS);
+	return enemys;
+}
+
 //logic of warrior's
 function attack(creep){
-	var enemys = creep.pos.findClosestByPath(FIND_HOSTILE_CREEPS);
+	var enemys = creep.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
 	creep.say('FISAB-IMBA');
 	if(creep.pos.isNearTo(enemys)){
 		creep.attack(enemys);
@@ -22,13 +27,13 @@ function storm(creep, wall){
 }
 
 function dodge(creep){
-	var closestCreep = creep.pos.findClosestByPath(FIND_MY_CREEPS);
+	var closestCreep = creep.pos.findClosestByRange(FIND_MY_CREEPS);
 	creep.moveTo(closestCreep);
 }
 
 //logic for healer's
 function healCreep(creep){
-	var needHeal = creep.pos.findClosestByPath(FIND_MY_CREEPS, {
+	var needHeal = creep.pos.findClosestByRange(FIND_MY_CREEPS, {
    		filter: function(object) {
        		return object.hits < object.hitsMax;
    		}
@@ -52,7 +57,7 @@ function party(creep){
 	//need make normal action
 	var action = Game.flags.action;
 	var enemys = creep.pos.findInRange(FIND_HOSTILE_CREEPS, 5);
-	var creepsForParty = creep.pos.findClosestByPath(FIND_MY_CREEPS, {
+	var creepsForParty = creep.pos.findClosestByRange(FIND_MY_CREEPS, {
    		filter: function(object) {
        		return object.memory.role == 'guard' || object.memory.role == 'healer' || object.memory.role == 'archer';
    		}
@@ -84,5 +89,6 @@ module.exports = {
 	healCreep: healCreep,
 	rangedAttack: rangedAttack,
 	party: party,
-	storm: storm
+	storm: storm,
+	checkEnemy: checkEnemy
 }
