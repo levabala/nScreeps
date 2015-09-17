@@ -18,8 +18,9 @@ function transferToLink(creep){
         if(creep.carryCapacity == creep.carry.energy){
             var closestLink = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                 filter: function(object) {
-                    if(object.structureType !== STRUCTURE_LINK ) {return false;}
-                    return true;
+                    if(object.structureType == "link"){
+                        return;
+                    }
                 }
             });           
             if(creep.pos.isNearTo(closestLink)){
