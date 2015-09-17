@@ -9,6 +9,7 @@ var mechanic1 = require('mechanic1');
 var transport = require('transport');
 var upgrade = require('upgrade');
 var status = require('status');
+var links = require('links');
 
 var room1 = Game.spawns.Spawn1.room;
 var spawn1 = Game.spawns.Spawn1;
@@ -77,4 +78,5 @@ for(var i = 0; i < creepsInRoom.length; i++) {
 }
 
 status.status();
+links.transfersLink(room1);
 
