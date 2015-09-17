@@ -16,7 +16,7 @@ function transferToLink(creep){
     var linkRange = creep.pos.findInRange(FIND_MY_STRUCTURES, 2);
     if(linkRange.length > 0){
         if(creep.carryCapacity == creep.carry.energy){
-            var closestLink = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+            var closestLink = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                 filter: function(object) {
                     if(object.structureType !== STRUCTURE_LINK ) {return false;}
                     return true;
