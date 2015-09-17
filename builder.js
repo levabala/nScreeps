@@ -1,7 +1,7 @@
 var globals = require('globals');
 
 function builds(creep){
-	var room = globals.getRoomCreep(creep);
+	var roomName = globals.getNameRoom(creep);
 	var needBuild = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
 	if(needBuild){
 		if(creep.pos.isNearTo(needBuild)){
@@ -12,10 +12,10 @@ function builds(creep){
 		}
 	}
 	else{
-		var constructedWall = room.find(FIND_STRUCTURES, {
+		var constructedWall = creep.pos.findClosestByRange(FIND_STRUCTURES, {
     		filter: function(object) {
     			if(object.structureType == "constructedWall"){
-        			return object.hits < globals.roomOptions.room.maxHits;
+        			return object.hits < globals.roomOptions.roomName.maxHits;
         		}
     		}
 		});
