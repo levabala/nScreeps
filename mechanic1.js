@@ -6,8 +6,7 @@ function repairRoad(creep){
 		creeps.takeEnergy(creep);
 	}
 	else{
-		var room = globals.getRoomCreep(creep);
-		var needRepairRoad = room.find(FIND_STRUCTURES, {
+		var needRepairRoad = creep.pos.findClosestByRange(FIND_STRUCTURES, {
     		filter: function(object) {
     			if(object.structureType == 'road'){
     				return object.hits < object.hitsMax;
@@ -15,11 +14,11 @@ function repairRoad(creep){
     		}
 		});
 		if(needRepairRoad){
-			if(creep.pos.isNearTo(needRepairRoad[0])){
-				creep.repair(needRepairRoad[0]);
+			if(creep.pos.isNearTo(needRepairRoad)){
+				creep.repair(needRepairRoad);
 			}
 			else{
-				creep.moveTo(needRepairRoad[0]);
+				creep.moveTo(needRepairRoad);
 			}
 		}
 	}
