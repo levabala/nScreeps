@@ -4,7 +4,22 @@ var creeps = require('creeps');
 function transportTo(creep){
     var room = globals.getRoomCreep(creep);
     var spawn = globals.getSpawn(room);
-    if(spawn[0].energy < spawn[0].energyCapacity){
+    var AllLinks = room.find(FIND_STRUCTURES, {
+        filter: function(object) {
+            if(object.structureType == "link"){
+                return;
+            }
+        }
+    });
+    if(AllLinks[0].energy == AllLinks[0].energyCapacity){
+        if(creep.pos.isNearTo(AllLinks[0])){
+            AllLinks[0].transferEnergy(creep);
+        }
+        else{
+            creep.moveTo(AllLinks[0])
+        }
+    }
+    else if(spawn[0].energy < spawn[0].energyCapacity){
         if(creep.pos.isNearTo(spawn[0])){
             creep.transferEnergy(spawn[0]);
         }
@@ -72,6 +87,7 @@ module.exports = {
     takesEnergy: takesEnergy,
     transferToStore: transferToStore
 }
+
 
 
 
