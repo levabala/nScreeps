@@ -8,7 +8,7 @@ function repairRamparts(creep){
 	else{
 		var room = globals.getRoomCreep(creep);
 		var roomName = globals.getNameRoom(creep);
-		var needRepairRampart = room.find(FIND_MY_STRUCTURES, {
+		var needRepairRampart = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
     		filter: function(object) {
     			if(object.structureType == 'rampart'){
     				return object.hits < globals.roomOptions.roomName.maxHits;
@@ -16,11 +16,11 @@ function repairRamparts(creep){
     		}
 		});
 		if(needRepairRampart){
-			if(creep.pos.isNearTo(needRepairRampart[0])){
-				creep.repair(needRepairRampart[0]);
+			if(creep.pos.isNearTo(needRepairRampart)){
+				creep.repair(needRepairRampart);
 			}
 			else{
-				creep.moveTo(needRepairRampart[0]);
+				creep.moveTo(needRepairRampart);
 			}
 		}
 	}	
