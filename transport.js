@@ -4,7 +4,6 @@ var creeps = require('creeps');
 function transportTo(creep){
     var room = globals.getRoomCreep(creep);
     var spawn = globals.getSpawn(room);
-    console.log(creep);
     if(spawn[0].energy < spawn[0].energyCapacity){
         if(creep.pos.isNearTo(spawn[0])){
             creep.transferEnergy(spawn[0]);
@@ -13,7 +12,7 @@ function transportTo(creep){
             creep.moveTo(spawn[0]);
         }
     }
-    var emptyExtensions = room.find(FIND_MY_STRUCTURES, {
+    var emptyExtensions = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
         filter: function(object){
             if(object.structureType == 'extension'){
                 return object.energy < object.energyCapacity;
@@ -21,23 +20,23 @@ function transportTo(creep){
         }
     });
     if(emptyExtensions){
-        if(creep.pos.isNearTo(emptyExtensions[0])){
-            creep.transferEnergy(emptyExtensions[0]);
+        if(creep.pos.isNearTo(emptyExtensions)){
+            creep.transferEnergy(emptyExtensions);
         }
         else{
-            creep.moveTo(emptyExtensions[0]);
+            creep.moveTo(emptyExtensions);
         }
     }
 }
 
 function takesEnergy(creep){
     var room = globals.getRoomCreep(creep);
-    var energy = room.find(FIND_DROPPED_ENERGY);
-    if(creep.pos.isNearTo(energy[0])){
-        creep.pickup(energy[0]);
+    var energy = creep.pos.findClosestByRange(FIND_DROPPED_ENERGY);
+    if(creep.pos.isNearTo(energy)){
+        creep.pickup(energy);
     }
     else{
-        creep.moveTo(energy[0]);
+        creep.moveTo(energy);
     }
 }
 
