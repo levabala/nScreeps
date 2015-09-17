@@ -12,6 +12,16 @@ function transportTo(creep){
             creep.moveTo(spawn[0]);
         }
     }
+    else if(spawn[1]){
+        if(spawn[1].energy < spawn[1].energyCapacity){
+            if(creep.pos.isNearTo(spawn[1])){
+                creep.transferEnergy(spawn[1]);
+            }
+            else{
+                creep.moveTo(spawn[1]);
+            }
+        }
+    }
     var emptyExtensions = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
         filter: function(object){
             if(object.structureType == 'extension'){
