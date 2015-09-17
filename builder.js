@@ -2,13 +2,13 @@ var globals = require('globals');
 
 function builds(creep){
 	var room = globals.getRoomCreep(creep);
-	var needBuild = room.find(FIND_CONSTRUCTION_SITES);
+	var needBuild = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
 	if(needBuild){
-		if(creep.pos.isNearTo(needBuild[0])){
-			creep.build(needBuild[0]);
+		if(creep.pos.isNearTo(needBuild)){
+			creep.build(needBuild);
 		}
 		else{
-			creep.moveTo(needBuild[0]);
+			creep.moveTo(needBuild);
 		}
 	}
 	else{
