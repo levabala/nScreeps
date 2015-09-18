@@ -37,19 +37,21 @@ function transportTo(creep){
             }
         }
     }
-    var emptyExtensions = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
-        filter: function(object){
-            if(object.structureType == 'extension'){
-                return object.energy < object.energyCapacity;
+    else{
+        var emptyExtensions = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
+            filter: function(object){
+                if(object.structureType == 'extension'){
+                    return object.energy < object.energyCapacity;
+                }
             }
-        }
-    });
-    if(emptyExtensions){
-        if(creep.pos.isNearTo(emptyExtensions)){
-            creep.transferEnergy(emptyExtensions);
-        }
-        else{
-            creep.moveTo(emptyExtensions);
+        });
+        if(emptyExtensions){
+            if(creep.pos.isNearTo(emptyExtensions)){
+                creep.transferEnergy(emptyExtensions);
+            }
+            else{
+                creep.moveTo(emptyExtensions);
+            }
         }
     }
 }
@@ -64,6 +66,30 @@ function takesEnergy(creep){
         creep.moveTo(energy);
     }
 }
+
+function transferToStore(creep){
+    var room = globals.getRoomCreep(creep);
+    var spawn = globals.getSpawn(room);
+    var storage = room.storage;
+    if(true){
+        transportTo(creep);
+    }
+    else if(storage){
+        if(creep.pos.isNearTo(storage)){
+            creep.transferEnergy(storage);
+        }
+        else{
+            creep.moveTo(storage);
+        }
+    }
+}
+
+module.exports = {
+    transportTo: transportTo,
+    takesEnergy: takesEnergy,
+    transferToStore: transferToStore
+}
+
 
 function transferToStore(creep){
     var room = globals.getRoomCreep(creep);
