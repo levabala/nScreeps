@@ -5,14 +5,15 @@ var needAllCreepsInRoom = 9;
 var harvesterCount = 0;
 var builderCount = 0;
 var guardCount = 0;
-var scoutCount = 0;
 var upgraderCount = 0;
 var mechanicCount = 0;
 var mechanic1Count = 0;
 var transportCount = 0;
 
-function countCreeps(spawn){
-	var room = globals.getRoomSpawn(spawn);
+var harvesters = [];
+var importantCreeps = 0;
+
+function countCreeps(spawn, room){
 	var creeps = globals.getCreepsInRoom(room);
 	for(var name in creeps){
 		var creep = creeps[name];
@@ -21,6 +22,7 @@ function countCreeps(spawn){
     	}
 	    if(creep.memory.role == 'harvester'){
 	        harvesterCount+=1;
+	        harvesters.push(creep);
 	    }
 	    if(creep.memory.role == 'guard'){
 	        guardCount+=1;
@@ -36,6 +38,9 @@ function countCreeps(spawn){
 	    }
 	    if(creep.memory.role == 'transport'){
 	        transportCount+=1;
+	        if(creep.ticksToLive < 300){
+	        	importantCreeps+=1;
+	        }
 	    }
 	}
 }
@@ -45,9 +50,8 @@ var spawn1 = Game.spawns.Spawn1;
 countCreeps(spawn1);
 
 var harvesterNeed = 3 - harvesterCount;
-var builderNeed = 2 - builderCount ;
+var builderNeed = 2 - builderCount;
 var guardNeed = 1 - guardCount;
-var scoutNeed = 1 - scoutCount;
 var upgraderNeed = 1 - upgraderCount;
 var mechanicNeed = 1 - mechanicCount;
 var mechanic1Need = 1 - mechanic1Count;
@@ -83,12 +87,27 @@ function deleteCreeps(){
     }    
 }
 
-function spawnCreeps(room, spawn, calcEnergy){
-	if(transportNeed > 0){
+function calcTarget(){
+	if(harvesterNeed == 1){
+		if(harvesters[0].memory.target == 1){
+			return 0;
+		}
+		return 1;
+	}
+	if(harvesterNeed == 2){
+		return 0;
+	}
+}
+
+function spawnCreeps(room, spawn, calcEnergy, target, importantCreeps){
+	if(importantCreeps > 0){
+		spawn.createCreep( bodies["transportBody"][calcEnergy], null , {role : "transport"} );
+	}
+	else if(transportNeed > 0){
 		spawn.createCreep( bodies["transportBody"][calcEnergy], null , {role : "transport"} );
 	}
 	else if(harvesterNeed > 0){
-		spawn.createCreep( bodies["havresterBody"][calcEnergy], null , {role : "harvester"} );
+		spawn.createCreep( bodies["havresterBody"][calcEnergy], null , {role : "harvester", target : target} );
 	}
 	else if(builderNeed > 0){
 		spawn.createCreep( bodies["builderBody"][calcEnergy], null , {role : "builder"} );
@@ -182,9 +201,12 @@ module.exports = {
 	upgraderNeed: upgraderNeed,
 	mechanicNeed: mechanicNeed,
 	mechanic1Need: mechanic1Need,
-	transportNeed: transportNeed
-
+	transportNeed: transportNeed,
+	calcTarget: calcTarget,
+	importantCreeps: importantCreeps
 }
+
+
 
 
 
