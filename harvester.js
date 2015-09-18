@@ -4,11 +4,12 @@ var spawn = require('spawn');
 
 function harvests(creep, room){
     var energy = room.find(FIND_SOURCES);
-    if(creep.pos.isNearTo(energy[0])){
-        creep.harvest(energy[0]);
+    var target = creep.memory.target;
+    if(creep.pos.isNearTo(energy[target])){
+        creep.harvest(energy[target]);
     }
     else{
-        creep.moveTo(energy[0]);
+        creep.moveTo(energy[target]);
     }
 }
 
