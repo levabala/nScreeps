@@ -17,7 +17,10 @@ var spawn1 = Game.spawns.Spawn1;
 var creepsInRoom = globals.getCreepsInRoom(room1);
 if(creepsInRoom.length < spawn.needAllCreepsInRoom){
     var calcEnergy = spawn.calcEnergy(room1);
-	spawn.spawnCreeps(room1, spawn1, calcEnergy);
+    var calcTarget = spawn.calcTarget();
+    var importantCreeps = spawn.importantCreeps;
+    spawn.countCreeps(spawn1, room1);
+	spawn.spawnCreeps(room1, spawn1, calcEnergy, calcTarget);
 }
 
 for(var i = 0; i < creepsInRoom.length; i++) {
