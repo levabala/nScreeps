@@ -19,3 +19,4 @@ transport.js - creeps who transport energy from storage to spawn and extension's
 3. Finish logic for guard's, archer's and healer's! =)
 4. If there is no transport. Scout change role. //delete scout
 5. And need make tap to flag's
+6. Need make pre-spawn for transport.
