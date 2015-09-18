@@ -107,7 +107,8 @@ function spawnCreeps(room, spawn, calcEnergy, target, importantCreeps){
 		spawn.createCreep( bodies["transportBody"][calcEnergy], null , {role : "transport"} );
 	}
 	else if(harvesterNeed > 0){
-		spawn.createCreep( bodies["havresterBody"][calcEnergy], null , {role : "harvester", target : target} );
+		var energy = room.find(FIND_SOURCES);
+		spawn.createCreep( bodies["havresterBody"][calcEnergy], null , {role : "harvester", target : energy[target]} );
 	}
 	else if(builderNeed > 0){
 		spawn.createCreep( bodies["builderBody"][calcEnergy], null , {role : "builder"} );
@@ -205,6 +206,7 @@ module.exports = {
 	calcTarget: calcTarget,
 	importantCreeps: importantCreeps
 }
+
 
 
 
