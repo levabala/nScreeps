@@ -7,7 +7,7 @@ var builder = require('builder');
 var mechanic = require('mechanic');
 var mechanic1 = require('mechanic1');
 var transport = require('transport');
-var upgrade = require('upgrade');
+var upgrades = require('upgrade');
 var status = require('status');
 var links = require('links');
 
@@ -35,7 +35,7 @@ if(creepsInRoom.length < spawn.needAllCreepsInRoom){
 for(var i = 0; i < creepsInRoom.length; i++) {
 	var creep = creepsInRoom[i];
 	if(creep.memory.role == 'upgrader'){
-	    upgrade.upgrade(creep);
+	    upgrades.upgrade(creep);
 	}
 	if(creep.memory.role == 'harvester'){
 		var room = globals.getRoomCreep(creep);
