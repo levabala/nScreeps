@@ -82,4 +82,4 @@ for(var i = 0; i < creepsInRoom.length; i++) {
 
 status.status();
 links.transfersLink(room1);
-
+action.party(room1);
