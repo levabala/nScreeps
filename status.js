@@ -13,14 +13,13 @@ function status(){
 	console.log('mechanic1Need - '+spawn.mechanic1Need+'mechanic1Count - '+spawn.mechanic1Count);
 	console.log('transportNeed - '+spawn.transportNeed+'transportCount - '+spawn.transportCount);
 	//about enemys
-	var enemys = action.checkEnemy(room1);
-	if(enemys.length > 0){
+	var alarm = action.alarm;
+	if(alarm == 1){
 		console.log('DETECTED ENEMY!!!');
 		console.log('DETECTED ENEMY!!!');
 		console.log('DETECTED ENEMY!!!');
 		console.log('DETECTED ENEMY!!!');
 		console.log('DETECTED ENEMY!!!');
-		Game.notify('DETECTED ENEMY: '+enemys.length);
 	}
 }
 
