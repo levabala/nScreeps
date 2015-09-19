@@ -14,6 +14,15 @@ var links = require('links');
 var room1 = Game.spawns.Spawn1.room;
 var spawn1 = Game.spawns.Spawn1;
 
+//check enemys
+var checkEnemy = action.checkEnemy(room1);
+
+if(checkEnemy.length > 0){
+	//alarm!:D
+	action.alarms();
+	Game.notify('There were enemies in the E4N9!!!');
+}
+
 var creepsInRoom = globals.getCreepsInRoom(room1);
 if(creepsInRoom.length < spawn.needAllCreepsInRoom){
     var calcEnergy = spawn.calcEnergy(room1);
@@ -47,6 +56,20 @@ for(var i = 0; i < creepsInRoom.length; i++) {
 		}
 	}
 	if(creep.memory.role == 'transport'){
+		var clean = creeps.suicideCreep(creep);
+		if(clean == 0){
+			if(creep.carry.energy == 0){
+				creep.takeEnergy(creep);
+			}
+			else{
+				transport.transferToStore(creep);
+			}
+		}
+		else{
+		    creeps.suicideCreep(creep);
+		}
+	}
+	if(creep.memory.role == 'transport1'){
 		var clean = creeps.suicideCreep(creep);
 		if(clean == 0){
 			if(creep.carry.energy == 0){
