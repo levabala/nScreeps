@@ -6,14 +6,13 @@ function checkEnemy(room){
 }
 
 //logic of warrior's
-function attack(creep){
-	var enemys = creep.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+function attack(creep, enemys){
 	creep.say('FISAB-IMBA');
-	if(creep.pos.isNearTo(enemys)){
-		creep.attack(enemys);
+	if(creep.pos.isNearTo(enemys[0])){
+		creep.attack(enemys[0]);
 	}
 	else{
-		creep.moveTo(enemys);
+		creep.moveTo(enemys[0]);
 	}
 }
 
@@ -47,38 +46,60 @@ function healCreep(creep){
 }
 
 //logic for archer's
-function rangedAttack(creep){
-	var enemys = creep.pos.findInRange(FIND_HOSTILE_CREEPS, 3);
-	creep.rangedAttack(enemys);
+function rangedAttack(creep, enemys){
+	var range = creep.pos.getRangeTo(enemys[0]);
+	if(enemys.length > 1){
+		if(range <= 3){
+			creep.rangedMassAttack();
+		}
+		else{
+			creep.moveTo(enemys[0]);
+		}
+	}
+	else{
+		if(range <= 3){
+			creep.rangedAttack(enemys[0]);
+		}
+		else{
+			creep.moveTo(enemys[0]);
+		}
+	}
 }
 
 //party of 3 creep types: guard, healer, archer.
-function party(creep){
+function party(room){
 	//need make normal action
+	var checkEnemy = checkEnemy(room);
 	var action = Game.flags.action;
-	var enemys = creep.pos.findInRange(FIND_HOSTILE_CREEPS, 5);
-	var creepsForParty = creep.pos.findClosestByRange(FIND_MY_CREEPS, {
+	var creeps = room.find(FIND_MY_CREEPS, {
    		filter: function(object) {
        		return object.memory.role == 'guard' || object.memory.role == 'healer' || object.memory.role == 'archer';
    		}
 	});
-	if(enemys.length > 0){
-		for(var i in creepsForParty){
-			var creep = creepsForParty[i];
-			if(creep[i].memory.role == 'guard'){
-				attack(creep[i]);
-			}
-			if(creep[i].memory.role == 'archer'){
-				rangedAttack(creep[i]);
-			}
-			if(creep[i].memory.role == 'healer'){
-				healCreep(creep[i]);
+	if(checkEnemy.length > 0){
+		var enemys = creeps[0].pos.findInRange(FIND_HOSTILE_CREEPS, 5);
+		if(enemys.length > 0){
+			for(var i in creeps){
+				var creep = creeps[i];
+				if(creep[i].memory.role == 'guard'){
+					attack(creep, enemys);
+				}
+				if(creep[i].memory.role == 'archer'){
+					rangedAttack(creep, enemys);
+				}
+				if(creep[i].memory.role == 'healer'){
+					healCreep(creep);
+				}
 			}
 		}
 	}
 	else{
-		for(var party in creepsForParty){
-			creepsForParty[party].moveTo(action);
+		if(checkEnemy.length > 0){
+			for(var party in creeps){
+				if(!creep.pos.isNearTo(checkEnemy[0])){
+					creeps[party].moveTo(checkEnemy[0]);
+				}
+			}
 		}
 	}
 }
