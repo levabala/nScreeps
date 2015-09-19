@@ -5,6 +5,12 @@ function checkEnemy(room){
 	return enemys;
 }
 
+//alarm for E4N9
+var alarm = 0;
+function alarms(){
+	alarm+=1;
+}
+
 //logic of warrior's
 function attack(creep, enemys){
 	creep.say('FISAB-IMBA');
@@ -68,36 +74,37 @@ function rangedAttack(creep, enemys){
 
 //party of 3 creep types: guard, healer, archer.
 function party(room){
-	//need make normal action
-	var checkEnemy = checkEnemy(room);
-	var action = Game.flags.action;
-	var creeps = room.find(FIND_MY_CREEPS, {
-   		filter: function(object) {
-       		return object.memory.role == 'guard' || object.memory.role == 'healer' || object.memory.role == 'archer';
-   		}
-	});
-	if(checkEnemy.length > 0){
-		var enemys = creeps[0].pos.findInRange(FIND_HOSTILE_CREEPS, 5);
-		if(enemys.length > 0){
-			for(var i in creeps){
-				var creep = creeps[i];
-				if(creep[i].memory.role == 'guard'){
-					attack(creep, enemys);
-				}
-				if(creep[i].memory.role == 'archer'){
-					rangedAttack(creep, enemys);
-				}
-				if(creep[i].memory.role == 'healer'){
-					healCreep(creep);
+	if(alarm == 1){
+		var checkEnemy = checkEnemy(room);
+		var action = Game.flags.action;
+		var creeps = room.find(FIND_MY_CREEPS, {
+	   		filter: function(object) {
+	       		return object.memory.role == 'guard' || object.memory.role == 'healer' || object.memory.role == 'archer';
+	   		}
+		});
+		if(checkEnemy.length > 0){
+			var enemys = creeps[0].pos.findInRange(FIND_HOSTILE_CREEPS, 5);
+			if(enemys.length > 0){
+				for(var i in creeps){
+					var creep = creeps[i];
+					if(creep[i].memory.role == 'guard'){
+						attack(creep, enemys);
+					}
+					if(creep[i].memory.role == 'archer'){
+						rangedAttack(creep, enemys);
+					}
+					if(creep[i].memory.role == 'healer'){
+						healCreep(creep);
+					}
 				}
 			}
 		}
-	}
-	else{
-		if(checkEnemy.length > 0){
-			for(var party in creeps){
-				if(!creep.pos.isNearTo(checkEnemy[0])){
-					creeps[party].moveTo(checkEnemy[0]);
+		else{
+			if(checkEnemy.length > 0){
+				for(var party in creeps){
+					if(!creep.pos.isNearTo(checkEnemy[0])){
+						creeps[party].moveTo(checkEnemy[0]);
+					}
 				}
 			}
 		}
@@ -111,5 +118,7 @@ module.exports = {
 	rangedAttack: rangedAttack,
 	party: party,
 	storm: storm,
-	checkEnemy: checkEnemy
+	checkEnemy: checkEnemy,
+	alarms: alarms,
+	alarm: alarm
 }
