@@ -43,7 +43,8 @@ function healCreep(creep){
        		return object.hits < object.hitsMax;
    		}
 	});
-	if(creep.pos.isNearTo(healCreep)){
+	if(creep.pos.isNearTo(needHeal)){
+		console.log(creep.heal(healCreep[0]));
 		creep.heal(healCreep);
 	}
 	else{
@@ -73,41 +74,38 @@ function rangedAttack(creep, enemys){
 }
 
 //party of 3 creep types: guard, healer, archer.
-function party(room){
-	if(alarm == 1){
-		var checkEnemy = checkEnemy(room);
-		var action = Game.flags.action;
-		var creeps = room.find(FIND_MY_CREEPS, {
-	   		filter: function(object) {
-	       		return object.memory.role == 'guard' || object.memory.role == 'healer' || object.memory.role == 'archer';
-	   		}
-		});
-		if(checkEnemy.length > 0){
-			var enemys = creeps[0].pos.findInRange(FIND_HOSTILE_CREEPS, 5);
-			if(enemys.length > 0){
-				for(var i in creeps){
-					var creep = creeps[i];
-					if(creep[i].memory.role == 'guard'){
-						attack(creep, enemys);
-					}
-					if(creep[i].memory.role == 'archer'){
-						rangedAttack(creep, enemys);
-					}
-					if(creep[i].memory.role == 'healer'){
-						healCreep(creep);
-					}
-				}
-			}
+function party(room, checkEnemy){
+	var action = Game.flags.action;
+	var creeps = room.find(FIND_MY_CREEPS, {
+		filter: function(object) {
+	   		return object.memory.role == 'guard' || object.memory.role == 'healer' || object.memory.role == 'archer';
 		}
-		else{
-			if(checkEnemy.length > 0){
-				for(var party in creeps){
-					if(!creep.pos.isNearTo(checkEnemy[0])){
-						creeps[party].moveTo(checkEnemy[0]);
-					}
-				}
-			}
-		}
+	});
+	if(creeps.length > 0){
+    	if(checkEnemy.length > 0){
+    		var enemys = creeps[0].pos.findInRange(FIND_HOSTILE_CREEPS, 3);
+    		if(enemys.length > 0){
+    			for(var i in creeps){
+    				var creep = creeps[i];
+    				if(creep.memory.role == 'guard'){
+    					attack(creep, enemys);
+    				}
+    				if(creep.memory.role == 'archer'){
+    					rangedAttack(creep, enemys);
+    				}
+    				if(creep.memory.role == 'healer'){
+    					healCreep(creep);
+    				}
+    			}
+    		}
+    		else{
+    			for(var party in creeps){
+    				if(!creeps[party].pos.isNearTo(checkEnemy[0])){
+    					creeps[party].moveTo(checkEnemy[0]);
+    				}
+    			}
+    		}
+    	}
 	}
 }
 
