@@ -25,3 +25,4 @@ transport.js - creeps who transport energy from storage to spawn and extension's
 # Further objects
 1. Make logic to assault enemy rooms
 2. Fix roomName at mechanic.js and builder.js
+3. Add new class of creeps. They just shift energy from link to storage and conversely.
