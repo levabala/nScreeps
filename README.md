@@ -13,7 +13,7 @@ mechanic1.js - repair roads.
 
 transport.js - creeps who transport energy from storage to spawn and extension's.
 
-# What need make yet:
+# What need make yet
 1. Split harvester's //finish
 2. Transfer's from link to link. //finish
 3. Finish logic for guard's, archer's and healer's! =)
