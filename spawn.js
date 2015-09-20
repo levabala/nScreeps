@@ -1,8 +1,6 @@
 var globals = require('globals');
-var creeps = require('creeps');
 var action = require('action');
 
-var needAllCreepsInRoom = 9;
 var harvesterCount = 0;
 var builderCount = 0;
 var guardCount = 0;
@@ -14,7 +12,6 @@ var archerCount = 0;
 var healerCount = 0;
 
 var harvesters = [];
-var importantCreeps = 0;
 
 function countCreeps(spawn, room){
 	var creeps = globals.getCreepsInRoom(room);
@@ -41,9 +38,6 @@ function countCreeps(spawn, room){
 	    }
 	    else if(creep.memory.role == 'transport'){
 	        transportCount+=1;
-	        if(creep.ticksToLive < 300){
-	        	importantCreeps+=1;
-	        }
 	    }
 	    else if(creep.memory.role == 'archer'){
 	    	archerCount+=1;
@@ -55,18 +49,34 @@ function countCreeps(spawn, room){
 }
 
 
-var spawn1 = Game.spawns.Spawn1;
-countCreeps(spawn1);
 
-var harvesterNeed = 3 - harvesterCount;
+var spawn1 = Game.spawns.Spawn1;
+var room1 = Game.spawns.Spawn1.room;
+
+countCreeps(spawn1, room1);
+
+var harvesterNeed = 2 - harvesterCount;
 var builderNeed = 2 - builderCount;
 var guardNeed = 1 - guardCount;
 var upgraderNeed = 1 - upgraderCount;
 var mechanicNeed = 1 - mechanicCount;
-var mechanic1Need = 1 - mechanic1Count;
-var transportNeed = 1 - transportCount;
+var mechanic1Need = 2 - mechanic1Count;
+var transportNeed = 2 - transportCount;
+
 var archerNeed = 0;
 var healerNeed = 0;
+
+var checkEnemys = action.checkEnemy(room1);
+
+if(checkEnemys.length > 0){
+	guardNeed = 2 - guardCount;
+	archerNeed = 1 - archerCount;
+	healerNeed = 1 - healerCount;
+}
+
+var needAllCreepsInRoom = archerNeed + healerNeed + harvesterNeed + builderNeed + guardNeed + upgraderNeed + mechanicNeed + mechanic1Need + transportNeed;
+var allCount = harvesterCount + builderCount + guardCount + upgraderCount + mechanicCount + mechanic1Count + transportCount + archerCount + healerCount;
+
 var alarm = action.alarm;
 if(alarm == 1){
 	archerNeed+=2;
@@ -90,6 +100,16 @@ function calcEnergy(room){
 	}
 }
 
+function getFreeSpawn(room){
+	var spawns = globals.getSpawn(room);
+	for (var i = 0; i < spawns.length; i++) {
+		if(spawns[i].spawning == undefined){
+			return spawns[i];
+			break;
+		}
+	}
+}
+
 function deleteCreeps(){
 	for(var creep in Memory.creeps){
     	if(!Game.creeps[creep]){
@@ -105,51 +125,49 @@ function deleteCreeps(){
 
 function calcTarget(){
 	if(harvesterNeed == 1){
-		if(harvesters[0].memory.target == 1){
-			return 0;
+		if(harvesters[0].memory.calc == 0){
+			return 1;
 		}
-		return 1;
+		else{
+		    return 0;
+		}
 	}
 	if(harvesterNeed == 2){
 		return 0;
 	}
 }
 
-function spawnCreeps(room, spawn, calcEnergy, target, importantCreeps){
-	if(importantCreeps > 0){
-		spawn.createCreep( bodies["transportBody"][calcEnergy], null , {role : "transport"} );
-	}
-	else if(transportNeed > 0){
-		spawn.createCreep( bodies["transportBody"][calcEnergy], null , {role : "transport"} );
-	}
-	else if(harvesterNeed > 0){
-		var energy = room.find(FIND_SOURCES);
-		spawn.createCreep( bodies["havresterBody"][calcEnergy], null , {role : "harvester", target : energy[target]} );
-	}
-	else if(transportNeed > 0){
-		spawn.createCreep( bodies["transportBody"][calcEnergy], null , {role : "transport1"} );
-	}
-	else if(builderNeed > 0){
-		spawn.createCreep( bodies["builderBody"][calcEnergy], null , {role : "builder"} );
-	}
-	else if(mechanicNeed > 0){
-		spawn.createCreep( bodies["mechanicBody"][calcEnergy], null , {role : "mechanic"} );
-	}
-	else if(mechanic1Need > 0){
-		spawn.createCreep( bodies["mechanicBody"][calcEnergy], null , {role : "mechanic1"} );
-	}
-	else if(upgraderNeed > 0){
-		spawn.createCreep( bodies["upgraderBody"][calcEnergy], null , {role : "upgrader"} );
-	}
-	else if(guardNeed > 0){
-		spawn.createCreep( bodies["guardBody"][calcEnergy], null , {role : "guard"} );
-	}
-	else if(archerNeed > 0){
-		spawn.createCreep( bodies["archerBody"][calcEnergy], null , {role : "archer"} );
-	}
-	else if(healerNeed > 0){
-		spawn.createCreep( bodies["healerBody"][calcEnergy], null , {role : "healer"} );
-	}
+function spawnCreeps(room, spawn, calcEnergy, target){
+    if(spawn != undefined){
+    	if(transportNeed > 0){
+    		spawn.createCreep( bodies["transportBody"][calcEnergy], null , {role : "transport"} );
+    	}
+    	else if(harvesterNeed > 0){
+    		var energy = room.find(FIND_SOURCES);
+    		spawn.createCreep( bodies["havresterBody"][calcEnergy], null , {role : "harvester", target : energy[target].id, calc : target} );
+    	}
+    	else if(builderNeed > 0){
+    		spawn.createCreep( bodies["builderBody"][calcEnergy], null , {role : "builder"} );
+    	}
+    	else if(mechanicNeed > 0){
+    		spawn.createCreep( bodies["mechanicBody"][calcEnergy], null , {role : "mechanic"} );
+    	}
+    	else if(mechanic1Need > 0){
+    		spawn.createCreep( bodies["mechanicBody"][calcEnergy], null , {role : "mechanic1"} );
+    	}
+    	else if(upgraderNeed > 0){
+    		spawn.createCreep( bodies["upgraderBody"][calcEnergy], null , {role : "upgrader"} );
+    	}
+    	else if(guardNeed > 0){
+    		spawn.createCreep( bodies["guardBody"][calcEnergy], null , {role : "guard"} );
+    	}
+    	else if(archerNeed > 0){
+    		spawn.createCreep( bodies["archerBody"][calcEnergy], null , {role : "archer"} );
+    	}
+    	else if(healerNeed > 0){
+    		spawn.createCreep( bodies["healerBody"][calcEnergy], null , {role : "healer"} );
+    	}
+    }
 }
 
 var bodies = {
@@ -214,7 +232,6 @@ module.exports = {
 	harvesterCount: harvesterCount,
 	builderCount: builderCount,
 	guardCount: guardCount,
-	scoutCount: scoutCount,
 	upgraderCount: upgraderCount,
 	mechanicCount: mechanicCount,
 	mechanic1Count: mechanic1Count,
@@ -223,17 +240,17 @@ module.exports = {
 	harvesterNeed: harvesterNeed,
 	builderNeed: builderNeed,
 	guardNeed: guardNeed,
-	scoutNeed: scoutNeed,
+	healerNeed: healerNeed,
+	archerNeed: archerNeed,
 	upgraderNeed: upgraderNeed,
 	mechanicNeed: mechanicNeed,
 	mechanic1Need: mechanic1Need,
 	transportNeed: transportNeed,
 	calcTarget: calcTarget,
-	importantCreeps: importantCreeps
+	allCount: allCount,
+	harvesters: harvesters,
+	getFreeSpawn: getFreeSpawn
 }
-
-
-
 
 
 
