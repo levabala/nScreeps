@@ -11,7 +11,7 @@ function repairRamparts(creep){
 		var needRepairRampart = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
     		filter: function(object) {
     			if(object.structureType == 'rampart'){
-    				return object.hits < globals.roomOptions.roomName.maxHits;
+    				return object.hits < globals.roomOptions.E4N9.maxHits;
     			}
     		}
 		});
