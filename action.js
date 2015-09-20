@@ -44,8 +44,8 @@ function healCreep(creep){
    		}
 	});
 	if(creep.pos.isNearTo(needHeal)){
-		console.log(creep.heal(healCreep[0]));
-		creep.heal(healCreep);
+		console.log(creep.heal(needHeal));
+		creep.heal(needHeal);
 	}
 	else{
 		creep.moveTo(healCreep);
@@ -76,6 +76,7 @@ function rangedAttack(creep, enemys){
 //party of 3 creep types: guard, healer, archer.
 function party(room, checkEnemy){
 	var action = Game.flags.action;
+	var wait = Game.flags.Flag1;
 	var creeps = room.find(FIND_MY_CREEPS, {
 		filter: function(object) {
 	   		return object.memory.role == 'guard' || object.memory.role == 'healer' || object.memory.role == 'archer';
@@ -103,6 +104,13 @@ function party(room, checkEnemy){
     				if(!creeps[party].pos.isNearTo(checkEnemy[0])){
     					creeps[party].moveTo(checkEnemy[0]);
     				}
+    			}
+    		}
+    	}
+    	else{
+    		for(var party in creeps){
+    			if(!creeps[party].pos.isNearTo(wait)){
+    				creeps[party].moveTo(wait);
     			}
     		}
     	}
