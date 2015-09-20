@@ -20,10 +20,10 @@ function transferToLink(creep){
             var closestLink = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                 filter: function(object) {
                     if(object.structureType == "link"){
-                        return;
+                        return object;
                     }
                 }
-            });           
+            });       
             if(creep.pos.isNearTo(closestLink)){
                 creep.transferEnergy(closestLink);
             }
