@@ -20,5 +20,8 @@ transport.js - creeps who transport energy from storage to spawn and extension's
 4. If there is no transport. Scout change role. //delete scout
 5. And need make tap to flag's // I refused this method because it did not live up to my expectations
 6. Need make pre-spawn for transport. //finish
-7. Make logic to assault enemy rooms
-8. TEST ALL //DONE!
+7. TEST ALL //DONE!
+
+# Further objects
+1. Make logic to assault enemy rooms
+2. Fix roomName at mechanic.js and builder.js
