@@ -68,13 +68,15 @@ var healerNeed = 0;
 
 var checkEnemys = action.checkEnemy(room1);
 
+var needAllCreepsInRoom = 11;
+
 if(checkEnemys.length > 0){
+    needAllCreepsInRoom = 14;
 	guardNeed = 2 - guardCount;
 	archerNeed = 1 - archerCount;
 	healerNeed = 1 - healerCount;
 }
 
-var needAllCreepsInRoom = archerNeed + healerNeed + harvesterNeed + builderNeed + guardNeed + upgraderNeed + mechanicNeed + mechanic1Need + transportNeed;
 var allCount = harvesterCount + builderCount + guardCount + upgraderCount + mechanicCount + mechanic1Count + transportCount + archerCount + healerCount;
 
 var alarm = action.alarm;
@@ -144,7 +146,7 @@ function spawnCreeps(room, spawn, calcEnergy, target){
     	}
     	else if(harvesterNeed > 0){
     		var energy = room.find(FIND_SOURCES);
-    		spawn.createCreep( bodies["havresterBody"][calcEnergy], null , {role : "harvester", target : energy[target].id, calc : target} );
+    		Game.spawns.Spawn1.createCreep( bodies["havresterBody"][calcEnergy], null , {role : "harvester", target : energy[target].id, calc : target} );
     	}
     	else if(builderNeed > 0){
     		spawn.createCreep( bodies["builderBody"][calcEnergy], null , {role : "builder"} );
@@ -251,6 +253,3 @@ module.exports = {
 	harvesters: harvesters,
 	getFreeSpawn: getFreeSpawn
 }
-
-
-
