@@ -56,10 +56,10 @@ var room1 = Game.spawns.Spawn1.room;
 countCreeps(spawn1, room1);
 
 var harvesterNeed = 2 - harvesterCount;
-var builderNeed = 2 - builderCount;
+var builderNeed = 1 - builderCount;
 var guardNeed = 1 - guardCount;
 var upgraderNeed = 1 - upgraderCount;
-var mechanicNeed = 1 - mechanicCount;
+var mechanicNeed = 2 - mechanicCount;
 var mechanic1Need = 2 - mechanic1Count;
 var transportNeed = 2 - transportCount;
 
@@ -68,7 +68,7 @@ var healerNeed = 0;
 
 var checkEnemys = action.checkEnemy(room1);
 
-var needAllCreepsInRoom = 11;
+var needAllCreepsInRoom = 12;
 
 if(checkEnemys.length > 0){
     needAllCreepsInRoom = 14;
@@ -107,7 +107,6 @@ function getFreeSpawn(room){
 	for (var i = 0; i < spawns.length; i++) {
 		if(spawns[i].spawning == undefined){
 			return spawns[i];
-			break;
 		}
 	}
 }
@@ -139,36 +138,69 @@ function calcTarget(){
 	}
 }
 
-function spawnCreeps(room, spawn, calcEnergy, target){
+function checkSpawn(room, freeSpawn){
+	var spawns = globals.getSpawn(room);
+	for(var i in spawns){
+		if(spawns[i] != freeSpawn){
+		    if(spawns[i].spawning != undefined){
+			    var name1 = spawns[i].spawning.name;
+			    return Game.creeps[name1].memory.role;
+		    }
+		}
+		else{
+		    return 0;
+		}
+	}
+}
+
+function spawnCreeps(room, spawn, calcEnergy, target, checkSpawns){
     if(spawn != undefined){
-    	if(transportNeed > 0){
-    		spawn.createCreep( bodies["transportBody"][calcEnergy], null , {role : "transport"} );
+    	if(checkSpawns != 'transport' || checkSpawns == 0){
+	    	if(transportNeed > 0){
+	    		spawn.createCreep( bodies["transportBody"][calcEnergy], null , {role : "transport"} );
+	    	}
+	    }
+    	if(checkSpawns != 'harvester' || checkSpawns == 0){
+    		if(harvesterNeed > 0){
+    			var energy = room.find(FIND_SOURCES);
+    			spawn.createCreep( bodies["havresterBody"][calcEnergy], null , {role : "harvester", target : energy[target].id, calc : target} );
+    		}
     	}
-    	else if(harvesterNeed > 0){
-    		var energy = room.find(FIND_SOURCES);
-    		Game.spawns.Spawn1.createCreep( bodies["havresterBody"][calcEnergy], null , {role : "harvester", target : energy[target].id, calc : target} );
+    	if(checkSpawns != 'builder' || checkSpawns == 0){
+	    	if(builderNeed > 0){
+	    		spawn.createCreep( bodies["builderBody"][calcEnergy], null , {role : "builder"} );
+	    	}
+	    }
+	    if(checkSpawns != 'mechanic' || checkSpawns == 0){
+	    	if(mechanicNeed > 0){
+	    		spawn.createCreep( bodies["mechanicBody"][calcEnergy], null , {role : "mechanic"} );
+	    	}
+	    }
+	    if(checkSpawns != 'mechanic1' || checkSpawns == 0){
+    		if(mechanic1Need > 0){
+    			spawn.createCreep( bodies["mechanicBody"][calcEnergy], null , {role : "mechanic1"} );
+    		}
     	}
-    	else if(builderNeed > 0){
-    		spawn.createCreep( bodies["builderBody"][calcEnergy], null , {role : "builder"} );
+    	if(checkSpawns != 'upgrader' || checkSpawns == 0){
+	    	if(upgraderNeed > 0){
+	    		spawn.createCreep( bodies["upgraderBody"][calcEnergy], null , {role : "upgrader"} );
+	    	}
+	    }
+	    if(checkSpawns != 'guard' || checkSpawns == 0){
+    		if(guardNeed > 0){
+    			spawn.createCreep( bodies["guardBody"][calcEnergy], null , {role : "guard"} );
+    		}
     	}
-    	else if(mechanicNeed > 0){
-    		spawn.createCreep( bodies["mechanicBody"][calcEnergy], null , {role : "mechanic"} );
-    	}
-    	else if(mechanic1Need > 0){
-    		spawn.createCreep( bodies["mechanicBody"][calcEnergy], null , {role : "mechanic1"} );
-    	}
-    	else if(upgraderNeed > 0){
-    		spawn.createCreep( bodies["upgraderBody"][calcEnergy], null , {role : "upgrader"} );
-    	}
-    	else if(guardNeed > 0){
-    		spawn.createCreep( bodies["guardBody"][calcEnergy], null , {role : "guard"} );
-    	}
-    	else if(archerNeed > 0){
-    		spawn.createCreep( bodies["archerBody"][calcEnergy], null , {role : "archer"} );
-    	}
-    	else if(healerNeed > 0){
-    		spawn.createCreep( bodies["healerBody"][calcEnergy], null , {role : "healer"} );
-    	}
+    	if(checkSpawns != 'archer' || checkSpawns == 0){
+	    	if(archerNeed > 0){
+	    		spawn.createCreep( bodies["archerBody"][calcEnergy], null , {role : "archer"} );
+	    	}
+	    }
+	    if(checkSpawns != 'healer' || checkSpawns == 0){
+	    	if(healerNeed > 0){
+	    		spawn.createCreep( bodies["healerBody"][calcEnergy], null , {role : "healer"} );
+	    	}
+	    }
     }
 }
 
@@ -251,5 +283,6 @@ module.exports = {
 	calcTarget: calcTarget,
 	allCount: allCount,
 	harvesters: harvesters,
-	getFreeSpawn: getFreeSpawn
+	getFreeSpawn: getFreeSpawn,
+	checkSpawn: checkSpawn
 }
