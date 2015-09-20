@@ -12,7 +12,27 @@ function transportTo(creep){
             }
         }
     });
-    if(AllLinks[0]){
+    var energy = creep.pos.findClosestByRange(FIND_DROPPED_ENERGY, {
+        filter: function(object) {
+            if(object.energy > 50){
+                return object;
+            }
+        }
+    });
+    if(energy){
+        if(creep.carry.energy < creep.carryCapacity){
+            takesEnergy(creep, energy);
+        }
+        else{
+            if(creep.pos.isNearTo(storage)){
+                creep.transferEnergy(storage);
+            }
+            else{
+                creep.moveTo(storage);
+            }
+        }
+    }
+    else if(AllLinks[0]){
         if(AllLinks[0].energy > 1){
             if(creep.carry.energy == 0){
                 if(creep.pos.isNearTo(AllLinks[0])){
@@ -30,21 +50,63 @@ function transportTo(creep){
                     creep.moveTo(storage);
                 }
             }
-        }    
+        }  
         else if(spawn[0].energy < spawn[0].energyCapacity){
-        if(creep.carry.energy == 0){
-            creeps.takeEnergy(creep);
-        }
-        else{
-            if(creep.pos.isNearTo(spawn[0])){
-                creep.transferEnergy(spawn[0]);
+            if(creep.carry.energy == 0){
+                creeps.takeEnergy(creep);
             }
             else{
-                creep.moveTo(spawn[0]);
+                if(creep.pos.isNearTo(spawn[0])){
+                    creep.transferEnergy(spawn[0]);
+                }
+                else{
+                    creep.moveTo(spawn[0]);
+                }
             }
         }
-    }
-    else{
+        else if(spawn[1]){
+            if(creep.carry.energy == 0){
+                creeps.takeEnergy(creep);
+            }
+            else if(spawn[1].energy < spawn[1].energyCapacity){
+                if(creep.pos.isNearTo(spawn[1])){
+                    creep.transferEnergy(spawn[1]);
+                }
+                else{
+                    creep.moveTo(spawn[1]);
+                }
+            }
+            else{
+                var emptyExtensions = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
+                    filter: function(object){
+                        if(object.structureType == 'extension'){
+                            return object.energy < object.energyCapacity;
+                        }
+                    }
+                });
+                if(emptyExtensions){
+                    if(creep.carry.energy == 0){
+                        creeps.takeEnergy(creep);
+                    }
+                    else if(creep.pos.isNearTo(emptyExtensions)){
+                        creep.transferEnergy(emptyExtensions);
+                    }
+                    else{
+                        creep.moveTo(emptyExtensions);
+                    }
+                }
+                else{
+                    if(creep.pos.isNearTo(storage)){
+                        creep.transferEnergy(storage);
+                    }
+                    else{
+                        creep.moveTo(storage);
+                    }
+                }
+            }   
+        }
+
+        else{
             var emptyExtensions = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
                 filter: function(object){
                     if(object.structureType == 'extension'){
@@ -71,9 +133,9 @@ function transportTo(creep){
                     creep.moveTo(storage);
                 }
             }
+        }    
     }
-        
-    }
+
     else if(spawn[0].energy < spawn[0].energyCapacity){
         if(creep.carry.energy == 0){
             creeps.takeEnergy(creep);
@@ -91,13 +153,36 @@ function transportTo(creep){
         if(creep.carry.energy == 0){
             creeps.takeEnergy(creep);
         }
-        else{
-            if(spawn[1].energy < spawn[1].energyCapacity){
+        else if(spawn[1].energy < spawn[1].energyCapacity){
                 if(creep.pos.isNearTo(spawn[1])){
                     creep.transferEnergy(spawn[1]);
                 }
                 else{
                     creep.moveTo(spawn[1]);
+                }
+        }
+        else{
+            var emptyExtensions = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
+                filter: function(object){
+                    if(object.structureType == 'extension'){
+                        return object.energy < object.energyCapacity;
+                    }
+                }
+            });
+            if(emptyExtensions){
+                if(creep.pos.isNearTo(emptyExtensions)){
+                    creep.transferEnergy(emptyExtensions);
+                }
+                else{
+                    creep.moveTo(emptyExtensions);
+                }
+            }
+            else{
+                if(creep.pos.isNearTo(storage)){
+                    creep.transferEnergy(storage);
+                }
+                else{
+                    creep.moveTo(storage);
                 }
             }
         }
@@ -134,9 +219,7 @@ function transportTo(creep){
     }
 }
 
-function takesEnergy(creep){
-    var room = globals.getRoomCreep(creep);
-    var energy = creep.pos.findClosestByRange(FIND_DROPPED_ENERGY);
+function takesEnergy(creep, energy){
     if(creep.pos.isNearTo(energy)){
         creep.pickup(energy);
     }
@@ -149,8 +232,5 @@ module.exports = {
     transportTo: transportTo,
     takesEnergy: takesEnergy
 }
-
-
-
 
 
