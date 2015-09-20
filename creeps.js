@@ -1,7 +1,5 @@
 var globals = require('globals');
 var spawn = require('spawn');
-var action = require('action');
-
 
 function takeEnergy(creep){
 	var room = globals.getRoomCreep(creep);
@@ -14,13 +12,16 @@ function takeEnergy(creep){
     	}
    	}
    	else{
-   		var spawn = globals.getSpawn(room);
-   		if(creep.pos.isNearTo(spawn[0])){
-      	    spawn[0].transferEnergy(creep);
-   		}
-   		else{
-   		    creep.moveTo(spawn[0]);
-   		}
+		var allCount = spawn.allCount;
+   	    if(spawn.needAllCreepsInRoom <= allCount.length){
+       		var spawn = globals.getSpawn(room);
+       		if(creep.pos.isNearTo(spawn[0])){
+          	    spawn[0].transferEnergy(creep);
+       		}
+       		else{
+       		    creep.moveTo(spawn[0]);
+       		}
+   	    }
    	}
 }
 
@@ -54,63 +55,8 @@ function cleanMemory(){
     }    
 }
 
-function transfersLink(room){
-	var AllLinks = room.find(FIND_STRUCTURES, {
-        filter: function(object) {
-            if(object.structureType == "link"){
-                return;
-            }
-        }
-    });
-    //AllLinks[0] - near storage
-    //allLinks[1], allLinks[2] - for harvester's
-	if(AllLinks[1]){
-		if(allLinks[0].energy == 0){
-    		if(allLinks[1].energy == allLinks[1].energyCapacity){
-        		allLinks[1].transferEnergy(allLinks[0]);
-    		}
-    	}
-	}
-	if(AllLinks[2]){
-		if(allLinks[0].energy == 0){
-    		if(allLinks[2].energy == allLinks[2].energyCapacity){
-        		allLinks[2].transferEnergy(allLinks[0]);
-    		}
-    	}
-	}
-}
-
-
-module.exports = {
-	transfersLink: transfersLink
-}
-
-
-function status(){
-	//about creeps
-	console.log('------->TICK<-------');
-	console.log('------->E4N9<-------');
-	console.log('harvesterNeed - '+spawn.harvesterNeed+'harvesterCount - '+spawn.harvesterCount);
-	console.log('builderNeed - '+.spawn.builderNeed+'builderCount - '+spawn.builderCount);
-	console.log('guardNeed - '+spawn.guardNeed+'guardNeed - '+spawn.guardCount);
-	console.log('upgraderNeed - '+spawn.upgraderNeed+'upgraderCount - '+spawn.upgraderCount);
-	console.log('mechanicNeed - '+spawn.mechanicNeed+'mechanicCount - '+spawn.mechanicCount);
-	console.log('mechanic1Need - '+spawn.mechanic1Need+'mechanic1Count - '+spawn.mechanic1Count);
-	console.log('transportNeed - '+spawn.transportNeed+'transportCount - '+spawn.transportCount);
-	//about enemys
-	var alarm = action.alarm;
-	if(alarm == 1){
-		console.log('DETECTED ENEMY!!!');
-		console.log('DETECTED ENEMY!!!');
-		console.log('DETECTED ENEMY!!!');
-		console.log('DETECTED ENEMY!!!');
-		console.log('DETECTED ENEMY!!!');
-	}
-}
 
 module.exports = {
 	takeEnergy: takeEnergy,
-	suicideCreep: suicideCreep,
-	status: status,
-	transfersLink: transfersLink
+	suicideCreep: suicideCreep
 }
