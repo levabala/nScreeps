@@ -1,11 +1,10 @@
-var suicideCreepTick = 200;
+var suicideCreepTick = 300;
 
 function getCreepsInRoom(room){
 	var creeps = room.find(FIND_MY_CREEPS);
 	return creeps;
 }
 
-    
 function getSpawn(room){
     var spawn = room.find(FIND_MY_SPAWNS);
 	return spawn;
@@ -27,8 +26,8 @@ function getNameRoom(creep){
 }
 
 var roomOptions = {
-	'E4N9': {
-		maxHits: 260000
+	E4N9: {
+		maxHits: 500000
 	}
 }
 
