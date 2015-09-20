@@ -15,7 +15,7 @@ function builds(creep){
 		var constructedWall = creep.pos.findClosestByRange(FIND_STRUCTURES, {
     		filter: function(object) {
     			if(object.structureType == "constructedWall"){
-        			return object.hits < globals.roomOptions.roomName.maxHits;
+        			return object.hits < globals.roomOptions.E4N9.maxHits;
         		}
     		}
 		});
@@ -26,6 +26,23 @@ function builds(creep){
 	    	else{
 	    		creep.moveTo(constructedWall);
 	    	}
+      	}
+      	else{
+      	    var needRepair = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
+    		    filter: function(object) {
+    			    if(object.structureType != "rampart"){
+        			    return object.hits < object.hitsMax;
+        		    }
+    		    }
+		    });
+		    if(needRepair){
+		        if(creep.pos.isNearTo(needRepair)){
+            	    creep.repair(needRepair);
+	    	    }
+	    	    else{
+	    		    creep.moveTo(needRepair);
+	    	    }
+		    }
       	}
     }
 }	
