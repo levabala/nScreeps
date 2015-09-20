@@ -31,7 +31,8 @@ if(creepsInRoom.length < spawn.needAllCreepsInRoom){
     var calcTarget = spawn.calcTarget();
     var importantCreeps = spawn.importantCreeps;
     var freeSpawn = spawn.getFreeSpawn(room1);
-	spawn.spawnCreeps(room1, freeSpawn, calcEnergy, calcTarget);
+    var checkSpawns = spawn.checkSpawn(room1, freeSpawn);
+	spawn.spawnCreeps(room1, freeSpawn, calcEnergy, calcTarget, checkSpawns);
 }
 
 for(var i = 0; i < creepsInRoom.length; i++) {
@@ -97,5 +98,3 @@ var checkEnemy = action.checkEnemy(room1);
 action.party(room1, checkEnemy);
 
 status.status();
-
-action.party(room1);
