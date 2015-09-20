@@ -1,5 +1,7 @@
 var globals = require('globals');
+
 var creeps = require('creeps');
+var links = require('links');
 var spawn = require('spawn');
 var harvester = require('harvester');
 var action = require('action');
@@ -8,8 +10,8 @@ var mechanic = require('mechanic');
 var mechanic1 = require('mechanic1');
 var transport = require('transport');
 var upgrades = require('upgrade');
+
 var status = require('status');
-var links = require('links');
 
 var room1 = Game.spawns.Spawn1.room;
 var spawn1 = Game.spawns.Spawn1;
@@ -28,8 +30,8 @@ if(creepsInRoom.length < spawn.needAllCreepsInRoom){
     var calcEnergy = spawn.calcEnergy(room1);
     var calcTarget = spawn.calcTarget();
     var importantCreeps = spawn.importantCreeps;
-    spawn.countCreeps(spawn1, room1);
-	spawn.spawnCreeps(room1, spawn1, calcEnergy, calcTarget);
+    var freeSpawn = spawn.getFreeSpawn(room1);
+	spawn.spawnCreeps(room1, freeSpawn, calcEnergy, calcTarget);
 }
 
 for(var i = 0; i < creepsInRoom.length; i++) {
@@ -39,7 +41,12 @@ for(var i = 0; i < creepsInRoom.length; i++) {
 	}
 	if(creep.memory.role == 'harvester'){
 		var room = globals.getRoomCreep(creep);
-		harvester.harvests(creep, room);
+		if(creep.carry.energy == 100){
+		    harvester.transferToLink(creep);
+		}
+		else{
+		   harvester.harvests(creep, room);
+		}
 	}
 	if(creep.memory.role == 'builder'){
 		var clean = creeps.suicideCreep(creep);
@@ -49,34 +56,6 @@ for(var i = 0; i < creepsInRoom.length; i++) {
 			}
 			else{
 				builder.builds(creep);
-			}
-		}
-		else{
-		    creeps.suicideCreep(creep);
-		}
-	}
-	if(creep.memory.role == 'transport'){
-		var clean = creeps.suicideCreep(creep);
-		if(clean == 0){
-			if(creep.carry.energy == 0){
-				creep.takeEnergy(creep);
-			}
-			else{
-				transport.transferToStore(creep);
-			}
-		}
-		else{
-		    creeps.suicideCreep(creep);
-		}
-	}
-	if(creep.memory.role == 'transport1'){
-		var clean = creeps.suicideCreep(creep);
-		if(clean == 0){
-			if(creep.carry.energy == 0){
-				transport.takesEnergy(creep);
-			}
-			else{
-				transport.transferToStore(creep);
 			}
 		}
 		else{
@@ -101,8 +80,22 @@ for(var i = 0; i < creepsInRoom.length; i++) {
 		    creeps.suicideCreep(creep);
 		}
 	}
+	if(creep.memory.role == 'transport'){
+		var clean = creeps.suicideCreep(creep);
+		if(clean == 0){
+			transport.transportTo(creep);
+		}
+		else{
+		    creeps.suicideCreep(creep);
+		}
+	}
 }
 
-status.status();
 links.transfersLink(room1);
+
+var checkEnemy = action.checkEnemy(room1);
+action.party(room1, checkEnemy);
+
+status.status();
+
 action.party(room1);
