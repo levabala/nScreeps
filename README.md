@@ -21,4 +21,4 @@ transport.js - creeps who transport energy from storage to spawn and extension's
 5. And need make tap to flag's // I refused this method because it did not live up to my expectations
 6. Need make pre-spawn for transport. //finish
 7. Make logic to assault enemy rooms
-8. TEST ALL
+8. TEST ALL //DONE!
