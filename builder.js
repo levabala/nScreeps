@@ -15,7 +15,12 @@ function builds(creep){
 		var constructedWall = creep.pos.findClosestByRange(FIND_STRUCTURES, {
     		filter: function(object) {
     			if(object.structureType == "constructedWall"){
-        			return object.hits < globals.roomOptions.E4N9.maxHits;
+    				if(roomName == 'E4N9'){
+        				return object.hits < globals.roomOptions.E4N9.maxHits;
+        			}
+    				else if(roomName == 'E1N7'){
+    					return object.hits < globals.roomOptions.E1N7.maxHits;
+    				}
         		}
     		}
 		});
@@ -42,6 +47,11 @@ function builds(creep){
 	    	    else{
 	    		    creep.moveTo(needRepair);
 	    	    }
+		    }
+		    else if(roomName == 'E1N7'){
+		        if(!creep.pos.isNearTo(Game.flags.wait1)){
+		            creep.moveTo(Game.flags.wait1);
+		        }
 		    }
       	}
     }
