@@ -3,8 +3,7 @@ var spawn = require('spawn');
 
 
 function harvests(creep, room){
-    var energy = Game.getObjectById(creep.memory.target)
-    var target = creep.memory.target;
+    var energy = Game.getObjectById(creep.memory.target);
     if(creep.pos.isNearTo(energy)){
         creep.harvest(energy);
     }
