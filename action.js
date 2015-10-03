@@ -7,13 +7,19 @@ function checkEnemy(room){
 
 //alarm for E4N9
 var alarm = 0;
-function alarms(){
-	alarm+=1;
+var alarm1 = 0;
+function alarms(roomName){
+	if(roomName == 'E4N9'){
+		alarm+=1;
+	}
+	if(roomName == 'E1N7'){
+		alarm1+=1;
+	}
 }
 
 //logic of warrior's
 function attack(creep, enemys){
-	creep.say('FISAB-IMBA');
+	//creep.say('FISAB-IMBA');
 	if(creep.pos.isNearTo(enemys[0])){
 		creep.attack(enemys[0]);
 	}
@@ -22,18 +28,9 @@ function attack(creep, enemys){
 	}
 }
 
-function storm(creep, wall){
-	if(creep.pos.isNearTo(wall)){
-		creep.attack(wall);
-	}
-	else{
-		creep.moveTo(wall);
-	}
-}
-
 function dodge(creep){
-	var closestCreep = creep.pos.findClosestByRange(FIND_MY_CREEPS);
-	creep.moveTo(closestCreep);
+	//var closestCreep = creep.pos.findClosestByRange(FIND_MY_CREEPS);
+	//creep.moveTo(closestCreep);
 }
 
 //logic for healer's
@@ -56,16 +53,13 @@ function healCreep(creep){
 function rangedAttack(creep, enemys){
 	var range = creep.pos.getRangeTo(enemys[0]);
 	if(enemys.length > 1){
-		if(range <= 3){
 			creep.rangedMassAttack();
-		}
-		else{
 			creep.moveTo(enemys[0]);
-		}
 	}
 	else{
 		if(range <= 3){
 			creep.rangedAttack(enemys[0]);
+			creep.rangedMassAttack();
 		}
 		else{
 			creep.moveTo(enemys[0]);
@@ -74,7 +68,13 @@ function rangedAttack(creep, enemys){
 }
 
 //party of 3 creep types: guard, healer, archer.
-function party(room, checkEnemy){
+function defenseParty(room, checkEnemy){
+	var Enemy = [];
+	for(var i in checkEnemy){
+		//if(checkEnemy.getActiveBodyparts(ATTACK) > 0 || checkEnemy.getActiveBodyparts(HEAL) > 0 || checkEnemy.getActiveBodyparts(RANGED_ATTACK) > 0){
+			Enemy.push(checkEnemy[i]);
+		//}
+	}
 	var action = Game.flags.action;
 	var wait = Game.flags.Flag1;
 	var creeps = room.find(FIND_MY_CREEPS, {
@@ -83,7 +83,7 @@ function party(room, checkEnemy){
 		}
 	});
 	if(creeps.length > 0){
-    	if(checkEnemy.length > 0){
+    	if(Enemy.length > 0){
     		var enemys = creeps[0].pos.findInRange(FIND_HOSTILE_CREEPS, 3);
     		if(enemys.length > 0){
     			for(var i in creeps){
@@ -101,17 +101,24 @@ function party(room, checkEnemy){
     		}
     		else{
     			for(var party in creeps){
-    				if(!creeps[party].pos.isNearTo(checkEnemy[0])){
-    					creeps[party].moveTo(checkEnemy[0]);
+    				if(!creeps[party].pos.isNearTo(Enemy[0])){
+    					creeps[party].moveTo(Enemy[0]);
     				}
     			}
     		}
     	}
     	else{
     		for(var party in creeps){
-    			if(!creeps[party].pos.isNearTo(wait)){
-    				creeps[party].moveTo(wait);
-    			}
+    		    if(room.name == 'E4N9'){
+        			if(!creeps[party].pos.isNearTo(wait)){
+        				creeps[party].moveTo(wait);
+        			}
+    		    }
+    		    else if(room.name == 'E1N7'){
+    		        if(!creeps[party].pos.isNearTo(Game.flags.wait1)){
+        				creeps[party].moveTo(Game.flags.wait1);
+        			}
+    		    }
     		}
     	}
 	}
@@ -122,9 +129,9 @@ module.exports = {
 	dodge: dodge,
 	healCreep: healCreep,
 	rangedAttack: rangedAttack,
-	party: party,
-	storm: storm,
+	defenseParty: defenseParty,
 	checkEnemy: checkEnemy,
 	alarms: alarms,
-	alarm: alarm
+	alarm: alarm,
+	alarm1: alarm1
 }
