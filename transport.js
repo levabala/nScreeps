@@ -13,10 +13,15 @@ function transportTo(creep){
 		AllLinks[2] = Game.getObjectById('55e9a822756a7a044fae2f73');
 		AllLinks[3] = Game.getObjectById('56018d4034274bb8090c53b4');
 	}
-	if(room.name == 'E1N7'){
-	    var energy1 = Game.getObjectById('560abfdf1b44c3c448c3139b');
+	if(room.name == 'W18N8'){
+	    var energy1 = room.find(FIND_DROPPED_ENERGY);
     	if(creep.carry.energy > 1){
-    	    var emptyExtensions1 = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
+    	    if(Game.spawns.Spawn1.energy < 300){
+        	    creep.moveTo(Game.spawns.Spawn1);
+        	    creep.transferEnergy(Game.spawns.Spawn1);
+    	    }
+    	    else{
+    	        var emptyExtensions1 = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
 			filter: function(object){
 				if(object.structureType == 'extension'){
 					return object.energy < object.energyCapacity;
@@ -27,14 +32,11 @@ function transportTo(creep){
 		        creep.moveTo(emptyExtensions1);
 		        creep.transferEnergy(emptyExtensions1);
 		    }
-		    else{
-        	    creep.moveTo(Game.spawns.Spawn3);
-        	    creep.transferEnergy(Game.spawns.Spawn3);
     	    }
     	}
     	else{
-    	        creep.moveTo(energy1);
-    	        creep.pickup(energy1);
+    	        creep.moveTo(energy1[0]);
+    	        creep.pickup(energy1[0]);
     	}
 	}
 	else{
@@ -166,6 +168,7 @@ module.exports = {
 	transportTo: transportTo,
 	takesEnergy: takesEnergy
 }
+
 
 
 
