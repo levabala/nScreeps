@@ -7,7 +7,7 @@ function status(){
 	console.log('------->TICK<-------');
 	console.log('Reserve CPU - '+Game.cpuLimit);
 	console.log('CaravanNeed - '+spawn.caravanNeed+' CaravanCount - '+spawn.caravanCount);
-	console.log('------->E4N9<-------');
+	console.log('------->W18N8<-------');
 	console.log('harvesterNeed - '+spawn.harvesterNeed+' harvesterCount - '+spawn.harvesterCount);
 	console.log('builderNeed - '+spawn.builderNeed+' builderCount - '+spawn.builderCount);
 	console.log('guardNeed - '+spawn.guardNeed+' guardCount - '+spawn.guardCount);
@@ -16,6 +16,8 @@ function status(){
 	console.log('mechanic1Need - '+spawn.mechanic1Need+' mechanic1Count - '+spawn.mechanic1Count);
 	console.log('transportNeed - '+spawn.transportNeed+' transportCount - '+spawn.transportCount);
 	console.log('turretNeed - '+spawn.turretNeed+' turretCount - '+spawn.turretCount);
+	console.log('secondTransportNeed - '+spawn.secondTransportNeed+' secondTransportCount - '+spawn.secondTransportCount);
+	console.log('secondHarvesterNeed - '+spawn.secondHarvesterNeed+' secondHarvesterCount - '+spawn.secondHarvesterCount);
 	var room1 = Game.spawns.Spawn1.room;
 	var creepsInRoom = globals.getCreepsInRoom(room1);
 	console.log('allCreeps - '+creepsInRoom.length);
