@@ -1,94 +1,137 @@
 var globals = require('globals');
 
 function checkEnemy(room){
-	room.find(FIND_HOSTILE_CREEPS, {
-		filter: function(object){
-			if(object.getActiveBodyparts(ATTACK) > 0 || object.getActiveBodyparts(RANGED_ATTACK) > 0){
-				return object;
-			}
-		}
-	});
+	var enemys = room.find(FIND_HOSTILE_CREEPS);
+	return enemys;
 }
 
-function findPosition(creep){
-	if(creep.memory.id == '1'){
-		return Game.flags.f1;
+//alarm for E4N9
+var alarm = 0;
+var alarm1 = 0;
+function alarms(roomName){
+	if(roomName == 'W18N8'){
+		alarm+=1;
 	}
-	else if(creep.memory.id == '2'){
-		return Game.flags.f2;
-	}
-	else if(creep.memory.id == '3'){
-		return Game.flags.f3;
-	}
-	else if(creep.memory.id == '4'){
-		return Game.flags.f4;
-	}
-	else if(creep.memory.id == '5'){
-		return Game.flags.f5;
-	}
-	else if(creep.memory.id == '6'){
-		return Game.flags.f6;
-	}
-	else if(creep.memory.id == '7'){
-		return Game.flags.f7;
-	}
-	else if(creep.memory.id == '11'){
-		return Game.flags.f11;
-	}
-	else if(creep.memory.id == '12'){
-		return Game.flags.f12;
-	}
-	else if(creep.memory.id == '13'){
-		return Game.flags.f13;
-	}
-	else if(creep.memory.id == '14'){
-		return Game.flags.f14;
+	if(roomName == 'E1N7'){
+		alarm1+=1;
 	}
 }
 
-function getRole(creep){
-	if(creep.getActiveBodyparts(ATTACK) > 0){
-		return 'warrior';
+//logic of warrior's
+function attack(creep, enemys){
+	//creep.say('FISAB-IMBA');
+	if(creep.pos.isNearTo(enemys[0])){
+		creep.attack(enemys[0]);
 	}
 	else{
-		return 'archer';
+		creep.moveTo(enemys[0], {reusePath: globals.reusePathTick});
 	}
 }
 
-function defense(enemy, creeps){
-	for(var i in creeps){
-		if(creeps[i].memory.role == 'defense'){
-			var f = findPosition(creeps[i]);
-			if(creep.pos != f.pos){
-				creep.moveTo(f, {reusePath: globals.reusePathTick});
-			}
-			else{
-				var role = getRole(creeps[i]);
-				if(role == 'warrior'){
-					var forAttack;
-					for(var x in enemy){
-						if(creep.pos.isNearTo(enemy[x])){
-							forAttack = enemy[x];
-							break;
-						}
-					}
-					creeps[i].attack(forAttack);
-				}
-				else if(role == 'archer'){
-					var forRangeAttack;
-					for(var y in enemy){
-						if(creep.pos.getRangeTo(enemy[y]) <= 3){
-							forAttack = enemy[y];
-							break;
-						}
-					}
-				}
-			}
+function dodge(creep){
+	//var closestCreep = creep.pos.findClosestByRange(FIND_MY_CREEPS);
+	//creep.moveTo(closestCreep);
+}
+
+//logic for healer's
+function healCreep(creep){
+	var needHeal = creep.pos.findClosestByRange(FIND_MY_CREEPS, {
+   		filter: function(object) {
+       		return object.hits < object.hitsMax;
+   		}
+	});
+	if(creep.pos.isNearTo(needHeal)){
+		console.log(creep.heal(needHeal));
+		creep.heal(needHeal);
+	}
+	else{
+		creep.moveTo(healCreep, {reusePath: globals.reusePathTick});
+	}
+}
+
+//logic for archer's
+function rangedAttack(creep, enemys){
+	var range = creep.pos.getRangeTo(enemys[0]);
+	if(enemys.length > 1){
+			creep.rangedMassAttack();
+			creep.moveTo(enemys[0], {reusePath: globals.reusePathTick});
+	}
+	else{
+		if(range <= 3){
+			creep.rangedAttack(enemys[0]);
+			creep.rangedMassAttack();
 		}
+		else{
+			creep.moveTo(enemys[0], {reusePath: globals.reusePathTick});
+		}
+	}
+}
+
+//party of 3 creep types: guard, healer, archer.
+function defenseParty(room, checkEnemy){
+	var Enemy = [];
+	for(var i in checkEnemy){
+		//if(checkEnemy.getActiveBodyparts(ATTACK) > 0 || checkEnemy.getActiveBodyparts(HEAL) > 0 || checkEnemy.getActiveBodyparts(RANGED_ATTACK) > 0){
+			Enemy.push(checkEnemy[i]);
+		//}
+	}
+	var action = Game.flags.action;
+	var wait = Game.flags.Flag1;
+	var creeps = room.find(FIND_MY_CREEPS, {
+		filter: function(object) {
+	   		return object.memory.role == 'guard' || object.memory.role == 'healer' || object.memory.role == 'archer';
+		}
+	});
+	if(creeps.length > 0){
+    	if(Enemy.length > 0){
+    		var enemys = creeps[0].pos.findInRange(FIND_HOSTILE_CREEPS, 3);
+    		if(enemys.length > 0){
+    			for(var i in creeps){
+    				var creep = creeps[i];
+    				if(creep.memory.role == 'guard'){
+    					attack(creep, enemys);
+    				}
+    				if(creep.memory.role == 'archer'){
+    					rangedAttack(creep, enemys);
+    				}
+    				if(creep.memory.role == 'healer'){
+    					healCreep(creep);
+    				}
+    			}
+    		}
+    		else{
+    			for(var party in creeps){
+    				if(!creeps[party].pos.isNearTo(Enemy[0])){
+    					creeps[party].moveTo(Enemy[0], {reusePath: globals.reusePathTick});
+    				}
+    			}
+    		}
+    	}
+    	else{
+    		for(var party in creeps){
+    		    if(room.name == 'W18N8'){
+        			if(!creeps[party].pos.isNearTo(wait)){
+        				creeps[party].moveTo(wait, {reusePath: globals.reusePathTick});
+        			}
+    		    }
+    		    else if(room.name == 'E1N7'){
+    		        if(!creeps[party].pos.isNearTo(Game.flags.wait1)){
+        				creeps[party].moveTo(Game.flags.wait1, {reusePath: globals.reusePathTick});
+        			}
+    		    }
+    		}
+    	}
 	}
 }
 
 module.exports = {
+	attack: attack,
+	dodge: dodge,
+	healCreep: healCreep,
+	rangedAttack: rangedAttack,
+	defenseParty: defenseParty,
 	checkEnemy: checkEnemy,
-	defense: defense
+	alarms: alarms,
+	alarm: alarm,
+	alarm1: alarm1
 }
